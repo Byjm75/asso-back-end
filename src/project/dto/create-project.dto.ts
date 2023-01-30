@@ -1,1 +1,5 @@
-export class CreateProjectDto {}
+export class CreateProjectDto {
+  topic: string;
+  body: string;
+  assoId: string;
+}

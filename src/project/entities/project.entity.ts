@@ -34,13 +34,14 @@ export class Project {
 
   //Je relis les tables suivant leurs cardinalités et par les clés étrangéres.
   //Méthode du "ondelete" en Cascade permet de supprimer les tables associées.
+  @ManyToOne(() => Association, (associations) => associations.projects, {
+    onDelete: 'CASCADE',
+    nullable: false,
+    eager: true,
+  })
+  association_: Association;
+
   @ManyToMany(() => Donor, { eager: true })
   @JoinTable()
   donors: Donor[];
-
-  @ManyToOne(() => Association, (association) => association.id, {
-    onDelete: 'CASCADE',
-    nullable: false,
-  })
-  assoId: Association;
 }
