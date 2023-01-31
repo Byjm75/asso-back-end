@@ -1,4 +1,6 @@
 import { Association } from 'src/association/entities/association.entity';
+import { DonationService } from 'src/donation/donation.service';
+import { Donation } from 'src/donation/entities/donation.entity';
 import { Donor } from 'src/donor/entities/donor.entity';
 import {
   Column,
@@ -6,6 +8,7 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -41,7 +44,10 @@ export class Project {
   })
   association_: Association;
 
-  @ManyToMany(() => Donor, { eager: true })
-  @JoinTable()
-  donors: Donor[];
+  @OneToMany(() => Donation, (donations) => donations.project_, {
+    onDelete: 'CASCADE',
+    nullable: false,
+    eager: true,
+  })
+  donations: Donation[];
 }

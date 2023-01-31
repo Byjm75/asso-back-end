@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
-export async function bootstrap() {
+async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('/api');
   app.enableCors({
@@ -11,3 +11,4 @@ export async function bootstrap() {
   });
   await app.listen(process.env.PORT);
 }
+bootstrap();

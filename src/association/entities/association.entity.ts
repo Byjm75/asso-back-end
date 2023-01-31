@@ -80,5 +80,5 @@ export class Association {
     nullable: false,
     onDelete: 'CASCADE',
   })
-  projects: Project;
+  projects: Project[];
 }
