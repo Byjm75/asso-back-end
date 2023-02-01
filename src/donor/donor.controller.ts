@@ -1,16 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { DonorService } from './donor.service';
-import { CreateDonorDto } from './dto/create-donor.dto';
 import { UpdateDonorDto } from './dto/update-donor.dto';
-
 @Controller('donor')
 export class DonorController {
   constructor(private readonly donorService: DonorService) {}
-
-  @Post()
-  create(@Body() createDonorDto: CreateDonorDto) {
-    return this.donorService.create(createDonorDto);
-  }
 
   @Get()
   findAll() {

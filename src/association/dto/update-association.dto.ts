@@ -1,4 +1,16 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateAssociationDto } from './create-association.dto';
+import { CreateAssoAuthDto } from 'src/auth/dto/create-asso.dto';
+import { RoleEnumType } from '../entities/association.entity';
 
-export class UpdateAssociationDto extends PartialType(CreateAssociationDto) {}
+export class UpdateAssociationDto extends PartialType(CreateAssoAuthDto) {
+  name: string;
+  email: string;
+  password: string;
+  siret: string;
+  rna: string;
+  theme: string;
+  url: string;
+  body: string;
+  picture: string;
+  roleA: RoleEnumType.ASSO;
+}

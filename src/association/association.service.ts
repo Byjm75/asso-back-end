@@ -1,16 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { CreateAssociationDto } from './dto/create-association.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { UpdateAssociationDto } from './dto/update-association.dto';
+import { Association } from './entities/association.entity';
 
 @Injectable()
 export class AssociationService {
-  create(createAssociationDto: CreateAssociationDto) {
-    return 'This action adds a new association';
-  }
+  constructor(
+    @InjectRepository(Association)
+    private DonorRepository: Repository<Association>,
+  ) {}
 
+  //--------------RESERVER A L'ADMIN---------------------
   findAll() {
     return `This action returns all association`;
   }
+  //-------------------------------------------------------
 
   findOne(id: number) {
     return `This action returns a #${id} association`;

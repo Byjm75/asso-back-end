@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DonorModule } from './donor/donor.module';
 import { AssociationModule } from './association/association.module';
 import { ProjectModule } from './project/project.module';
 import { ConfigModule } from '@nestjs/config';
@@ -15,12 +14,12 @@ import { Association } from './association/entities/association.entity';
 import { Project } from './project/entities/project.entity';
 import { DonationModule } from './donation/donation.module';
 import { Donation } from './donation/entities/donation.entity';
+import { DonorModule } from './donor/donor.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env.local',
-      //autoLoadEntities: true,
     }),
     MulterModule.register({ dest: './files' }),
     ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'files') }),

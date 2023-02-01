@@ -1,41 +1,39 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
+import { CreateAssoAuthDto } from './dto/create-asso.dto';
+import { CreateDonorAuthDto } from './dto/create-donor.dto';
+import { LoginAssoDto } from './dto/login-asso.dto';
+import { LoginDonorDto } from './dto/login-donor.dto';
 
+//Dossier Authentification
 @Controller('auth')
 export class AuthController {
+  donorService: any;
+  assoService: any;
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  // Ici le donateur créer son profil
+  @Post('register/donor')
+  createDonor(@Body() createDonorAuthDto: CreateDonorAuthDto) {
+    return this.authService.registerDonor(createDonorAuthDto);
+  }
+  // Ici l'association créer son profil
+  @Post('register/asso')
+  createAsso(@Body() createAssoAuthDto: CreateAssoAuthDto) {
+    return this.authService.registerAsso(createAssoAuthDto);
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
+  @Post('login/donor')
+  loginDonor(
+    @Body() loginDonorDto: LoginDonorDto,
+  ): Promise<{ accessToken: string }> {
+    return this.authService.loginDonor(loginDonorDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-  //   return this.authService.update(+id, updateAuthDto);
-  // }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+  @Post('login/asso')
+  loginAsso(
+    @Body() loginAssoDto: LoginAssoDto,
+  ): Promise<{ accessToken: string }> {
+    return this.authService.loginAsso(loginAssoDto);
   }
 }

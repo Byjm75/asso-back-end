@@ -1,5 +1,4 @@
 import { Association } from 'src/association/entities/association.entity';
-import { RoleEnumType } from 'src/auth/roles.decorator';
 import { Donation } from 'src/donation/entities/donation.entity';
 import {
   Column,
@@ -9,6 +8,11 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+
+export enum RoleEnumType {
+  DONOR = 'donor',
+}
+
 @Entity()
 export class Donor {
   //Je génére la clé primaire
@@ -18,6 +22,7 @@ export class Donor {
   //Je crée les colonnes
   @Column({
     nullable: false,
+    unique: true,
   })
   pseudo: string; //Je nomme le nom de la colonne et la type
 
@@ -29,10 +34,11 @@ export class Donor {
   @Column({
     nullable: false,
   })
-  firstName: string;
+  firstname: string;
 
   @Column({
     nullable: false,
+    unique: true,
   })
   email: string;
   //TypeOrm est typé par default en varchar 255 si autre le préciser

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm/dist';
 import { Repository } from 'typeorm';
-import { CreateDonorDto } from './dto/create-donor.dto';
 import { UpdateDonorDto } from './dto/update-donor.dto';
 import { Donor } from './entities/donor.entity';
 
@@ -11,10 +10,6 @@ export class DonorService {
     @InjectRepository(Donor)
     private DonorRepository: Repository<Donor>,
   ) {}
-
-  create(createDonorDto: CreateDonorDto) {
-    return 'This action adds a new donor';
-  }
 
   findAll() {
     return `This action returns all donor`;

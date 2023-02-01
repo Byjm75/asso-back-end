@@ -15,7 +15,7 @@ export class Donation {
   @Column({
     nullable: false,
   })
-  byMonth: Boolean;
+  by_month: Boolean;
 
   @Column({
     nullable: false,

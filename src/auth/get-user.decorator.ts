@@ -2,13 +2,23 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { Association } from 'src/association/entities/association.entity';
 import { Donor } from 'src/donor/entities/donor.entity';
 
-//création de la méthode Getuser
-export const GetUser = createParamDecorator(
-  (_data, ctx: ExecutionContext): [Donor, Association] => {
+//création de la méthode Getuser pour Donor
+export const GetDonor = createParamDecorator(
+  (_data, ctx: ExecutionContext): Donor => {
     const req = ctx.switchToHttp().getRequest();
-    const user: [Donor, Association] = {
-      ...req.user,
+    const donor: Donor = {
+      ...req.donor,
     };
-    return user;
+    return donor;
+  },
+);
+//création de la méthode Getuser pour Association
+export const GetAsso = createParamDecorator(
+  (_data, ctx: ExecutionContext): Association => {
+    const req = ctx.switchToHttp().getRequest();
+    const asso: Association = {
+      ...req.asso,
+    };
+    return asso;
   },
 );

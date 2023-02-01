@@ -1,12 +1,13 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { RoleEnumType } from 'src/auth/roles.decorator';
-import { CreateDonorDto } from './create-donor.dto';
+import { CreateDonorAuthDto } from 'src/auth/dto/create-donor.dto';
+import { RoleEnumType } from '../entities/donor.entity';
 
-export class UpdateDonorDto extends PartialType(CreateDonorDto) {
+export class UpdateDonorDto extends PartialType(CreateDonorAuthDto) {
   pseudo: string;
+  surname: string;
+  firstname: string;
   email: string;
   password: string;
-  picture: string;
-  hashedPassword: string;
-  role: RoleEnumType;
+  picture?: string;
+  roleD: RoleEnumType.DONOR;
 }
