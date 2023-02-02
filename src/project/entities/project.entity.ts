@@ -1,12 +1,8 @@
 import { Association } from 'src/association/entities/association.entity';
-import { DonationService } from 'src/donation/donation.service';
 import { Donation } from 'src/donation/entities/donation.entity';
-import { Donor } from 'src/donor/entities/donor.entity';
 import {
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -33,7 +29,12 @@ export class Project {
   @Column({
     nullable: true,
   })
-  picture?: string;
+  url: string;
+
+  @Column({
+    nullable: true,
+  })
+  picture: string;
 
   //Je relis les tables suivant leurs cardinalités et par les clés étrangéres.
   //Méthode du "ondelete" en Cascade permet de supprimer les tables associées.

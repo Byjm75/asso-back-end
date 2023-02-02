@@ -14,11 +14,13 @@ export class Association {
   //Je crée les colonnes
   @Column({
     nullable: false,
+    unique: true,
   })
   name: string; //Je nomme le nom de la colonne et la type
 
   @Column({
     nullable: false,
+    unique: true,
   })
   email: string;
 
@@ -61,7 +63,7 @@ export class Association {
   @Column({
     nullable: true,
   })
-  picture?: string;
+  picture: string;
 
   @Column({
     type: 'enum',

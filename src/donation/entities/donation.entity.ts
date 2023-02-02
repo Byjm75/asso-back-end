@@ -1,6 +1,12 @@
 import { Donor } from 'src/donor/entities/donor.entity';
 import { Project } from 'src/project/entities/project.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Donation {
@@ -9,17 +15,16 @@ export class Donation {
 
   @Column({
     nullable: false,
+    type: 'float',
   })
-  amount: Number;
+  amount: number;
 
   @Column({
     nullable: false,
   })
-  by_month: Boolean;
+  by_month: boolean;
 
-  @Column({
-    nullable: false,
-  })
+  @CreateDateColumn()
   created_at: Date;
 
   @ManyToOne(() => Project, (projects) => projects.donations, {
