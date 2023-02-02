@@ -15,7 +15,7 @@ export class CreateDonorAuthDto {
     message: ' *Le pseudo ne peux pas être vide',
   })
   @IsString({
-    message: ' *le pseudo doit être une chaine de caractère',
+    message: ' *Le pseudo doit être une chaine de caractère',
   })
   @Matches(/^[A-Za-z]*$/, {
     message: "*Le pseudo ne doit pas contenir d'espace",
@@ -29,7 +29,7 @@ export class CreateDonorAuthDto {
     message: ' *Le prénom ne peux pas être vide',
   })
   @IsString({
-    message: ' *le prénom doit être une chaine de caractère',
+    message: ' *Le prénom doit être une chaine de caractère',
   })
   @Matches(/^[A-Za-z]*$/, {
     message: "*Le prénom ne doit pas contenir d'espace",
@@ -43,7 +43,7 @@ export class CreateDonorAuthDto {
     message: ' *Le nom ne peux pas être vide',
   })
   @IsString({
-    message: ' *le nom doit être une chaine de caractère',
+    message: ' *Le nom doit être une chaine de caractère',
   })
   @Matches(/^[A-Za-z]*$/, {
     message: "*Le nom ne doit pas contenir d'espace",
@@ -79,6 +79,7 @@ export class CreateDonorAuthDto {
   password: string;
   //----------------------------------------------------------------------------
   @IsOptional()
-  picture?: string;
-  role: RoleEnumType.DONOR;
+  @IsString()
+  picture: string;
+  // role: RoleEnumType.DONOR;
 }

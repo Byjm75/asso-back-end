@@ -31,21 +31,21 @@ export class Association {
 
   @Column({
     nullable: false,
-    type: 'varchar',
+    type: 'char',
     length: 14,
   })
   siret: string;
 
   @Column({
     nullable: false,
-    type: 'varchar',
+    type: 'char',
     length: 10,
   })
   rna: string;
 
   @Column({
     nullable: false,
-    type: 'varchar',
+    type: 'char',
     length: 50,
   })
   theme: string;

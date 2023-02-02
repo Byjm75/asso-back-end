@@ -28,11 +28,13 @@ export class Donor {
 
   @Column({
     nullable: false,
+    unique: true,
   })
   surname: string;
 
   @Column({
     nullable: false,
+    unique: true,
   })
   firstname: string;
 
@@ -51,7 +53,7 @@ export class Donor {
   @Column({
     nullable: true,
   })
-  picture?: string;
+  picture: string;
 
   @Column({
     type: 'enum',

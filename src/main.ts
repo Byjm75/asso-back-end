@@ -4,20 +4,8 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ forbidUnknownValues: false }));
   app.setGlobalPrefix('api');
   await app.listen(process.env.PORT);
 }
 bootstrap();
-
-// async function bootstrap() {
-//   const app = await NestFactory.create(AppModule);
-//   app.setGlobalPrefix('/api');
-//   app.enableCors({
-//     origin: '*',
-//     methods: 'GET, PUT, POST,PATCH, DELETE',
-//     allowedHeaders: 'Content-Type, Authorization',
-//   });
-//   await app.listen(process.env.PORT);
-// }
-// bootstrap();

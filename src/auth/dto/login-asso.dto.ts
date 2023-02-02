@@ -14,7 +14,7 @@ export class LoginAssoDto {
     message: ' *Le nom ne peux pas être vide',
   })
   @IsString({
-    message: ' *le nom doit être une chaine de caractère',
+    message: ' *Le nom doit être une chaine de caractère',
   })
   @MinLength(1, {
     message: ' *Le nom doit contenir au moins un caractère ',
@@ -37,7 +37,7 @@ export class LoginAssoDto {
     message: ' *Le mot de passe ne peux pas être vide',
   })
   @IsString({
-    message: ' *le mot de passe doit être une chaine de caractère',
+    message: ' *Le mot de passe doit être une chaine de caractère',
   })
   @MinLength(8, {
     message: '*Le mot de passe doit contenir au moins 8 caractères',

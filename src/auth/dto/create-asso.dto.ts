@@ -17,7 +17,7 @@ export class CreateAssoAuthDto {
     message: ' *Le nom ne peux pas être vide',
   })
   @IsString({
-    message: ' *le nom doit être une chaine de caractère',
+    message: ' *Le nom doit être une chaine de caractère',
   })
   @MinLength(1, {
     message: ' *Le nom doit contenir au moins un caractère ',
@@ -25,7 +25,7 @@ export class CreateAssoAuthDto {
   name: string;
   //------------------------------------------------------email---------
   @IsNotEmpty({
-    message: "*L'email nom ne peux pas être vide",
+    message: "*L'email ne peux pas être vide",
   })
   @IsEmail(
     {},
@@ -40,7 +40,7 @@ export class CreateAssoAuthDto {
     message: ' *Le mot de passe ne peux pas être vide',
   })
   @IsString({
-    message: ' *le mot de passe doit être une chaine de caractère',
+    message: ' *Le mot de passe doit être une chaine de caractère',
   })
   @MinLength(8, {
     message: '*Le mot de passe doit contenir au moins 8 caractères',
@@ -61,7 +61,7 @@ export class CreateAssoAuthDto {
     message: '*Le Siret doit contenir au moins 1 caractère',
   })
   @MaxLength(14, {
-    message: '*Le Siret doit contenir au max 14 caractères',
+    message: '*Le Siret doit contenir au maximum 14 caractères',
   })
   @Matches(/^(?=.*[A-Z])(?=.*[0-9])/, {
     message: '*Le Siret doit contenir une majuscule et un nombre',
@@ -89,18 +89,28 @@ export class CreateAssoAuthDto {
     message: ' *Le thème doit être renseigné',
   })
   @IsString({
-    message: ' *le thème doit être une chaine de caractère',
+    message: ' *Le thème doit être une chaine de caractère',
+  })
+  @MaxLength(50, {
+    message: '*Le thème doit contenir au max 10 caractères',
   })
   theme: string;
-  //---------------------------------------------------------------------
+  //-------------------------------------------------------------------
   @IsOptional()
   @IsDataURI()
   url: string;
+  //---------------------------------------------------body------------
   @IsOptional()
-  @IsString()
+  @IsString({
+    message: ' *Le champ de texte doit être une chaine de caractère',
+  })
+  @MinLength(10, {
+    message: '*Le champ de texte doit contenir au moins 10 caractère',
+  })
   body: string;
+  //---------------------------------------------------------------------
   @IsOptional()
   @IsString()
   picture: string;
-  role: RoleEnumType.ASSOCIATION;
+  // role: RoleEnumType.ASSOCIATION;
 }

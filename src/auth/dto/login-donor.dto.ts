@@ -14,7 +14,7 @@ export class LoginDonorDto {
     message: ' *Le pseudo ne peux pas être vide',
   })
   @IsString({
-    message: ' *le pseudo doit être une chaine de caractère',
+    message: ' *Le pseudo doit être une chaine de caractère',
   })
   @Matches(/^[A-Za-z]*$/, {
     message: "*Le pseudo ne doit pas contenir d'espace",
@@ -25,7 +25,7 @@ export class LoginDonorDto {
   pseudo: string;
   //------------------------------------------------------email---------
   @IsNotEmpty({
-    message: " *L' email ne peux pas être vide",
+    message: " *L'email ne peux pas être vide",
   })
   @IsEmail(
     {},

@@ -17,7 +17,6 @@ import { UpdateAssociationDto } from './dto/update-association.dto';
 export class AssociationController {
   constructor(private readonly associationService: AssociationService) {}
 
-  //--------------RESERVER A L'ADMIN---------------------
   @Get(':id')
   findAll() {
     return this.associationService.findAll();
