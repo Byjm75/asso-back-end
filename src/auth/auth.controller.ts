@@ -25,7 +25,8 @@ export class AuthController {
       createDonorAuthDto.surname &&
       createDonorAuthDto.firstname &&
       createDonorAuthDto.email &&
-      createDonorAuthDto.password
+      createDonorAuthDto.password &&
+      createDonorAuthDto.role
     )
       return this.authService.createDonor(createDonorAuthDto);
     else {
@@ -35,18 +36,18 @@ export class AuthController {
     }
   }
 
-  @Post('login/donor')
-  async loginDonor(
-    @Body() donor: LoginDonorDto,
-  ): Promise<{ access_token: string }> {
-    if (donor.pseudo && donor.email && donor.password) {
-      return this.authService.loginDonor(donor);
-    } else {
-      throw new BadRequestException(
-        `Les champs pseudo, email et/ou password n'ont pas été renseignés correctement!`,
-      );
-    }
-  }
+  // @Post('login/donor')
+  // async loginDonor(
+  //   @Body() donor: LoginDonorDto,
+  // ): Promise<{ access_token: string }> {
+  //   if (donor.pseudo && donor.email && donor.password) {
+  //     return this.authService.loginDonor(donor);
+  //   } else {
+  //     throw new BadRequestException(
+  //       `Les champs pseudo, email et/ou password n'ont pas été renseignés correctement!`,
+  //     );
+  //   }
+  // }
   // Ici l'association créer son profil
   @Post('register/asso')
   createrAsso(@Body() createAssoAuthDto: CreateAssoAuthDto) {

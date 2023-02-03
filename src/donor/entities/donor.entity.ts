@@ -56,11 +56,12 @@ export class Donor {
   picture: string;
 
   @Column({
-    type: 'enum',
-    enum: RoleEnumType,
-    default: RoleEnumType.DONOR,
+    nullable: false,
+    // type: 'enum',
+    // enum: RoleEnumType,
+    // default: RoleEnumType.DONOR,
   })
-  role: RoleEnumType;
+  role: string;
 
   //Je relis les tables suivant leurs cardinalités et par les clés étrangéres.
   //Méthode du "ondelete en Cascade permet de supprimer les tables associées"

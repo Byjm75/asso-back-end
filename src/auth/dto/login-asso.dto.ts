@@ -5,7 +5,7 @@ import {
   Matches,
   MinLength,
 } from 'class-validator';
-import { RoleEnumType } from '../roles.decorator';
+import { RoleEnumType } from 'src/association/entities/association.entity';
 
 // Ici la class et propriétés nécessaire pour connexion au comptes des roles.
 export class LoginAssoDto {
@@ -47,5 +47,5 @@ export class LoginAssoDto {
       '*Le mot de passe doit contenir une majuscule, une minuscule et un nombre',
   })
   password: string;
-  role: RoleEnumType.ASSOCIATION;
+  role: RoleEnumType.ASSO;
 }

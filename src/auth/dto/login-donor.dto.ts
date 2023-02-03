@@ -5,7 +5,7 @@ import {
   Matches,
   MinLength,
 } from 'class-validator';
-import { RoleEnumType } from '../roles.decorator';
+// import { RoleEnumType } from 'src/donor/entities/donor.entity';
 
 // Ici la class et propriétés nécessaire pour connexion au comptes des roles.
 export class LoginDonorDto {
@@ -48,5 +48,5 @@ export class LoginDonorDto {
       '*Le mot de passe doit contenir une majuscule, une minuscule et un nombre',
   })
   password: string;
-  role: RoleEnumType.DONOR;
+  // role: RoleEnumType.DONOR;
 }

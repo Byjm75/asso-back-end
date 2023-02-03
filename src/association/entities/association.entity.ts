@@ -3,6 +3,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum RoleEnumType {
   ASSO = 'asso',
+  DONOR = 'donor',
 }
 
 @Entity()

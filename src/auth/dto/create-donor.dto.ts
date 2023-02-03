@@ -6,7 +6,7 @@ import {
   Matches,
   MinLength,
 } from 'class-validator';
-import { RoleEnumType } from '../roles.decorator';
+// import { RoleEnumType } from 'src/donor/entities/donor.entity';
 
 // Ici la class et propriétés nécessaire à la création d'un compte
 export class CreateDonorAuthDto {
@@ -81,5 +81,6 @@ export class CreateDonorAuthDto {
   @IsOptional()
   @IsString()
   picture: string;
-  // role: RoleEnumType.DONOR;
+  @IsString()
+  role?: string;
 }

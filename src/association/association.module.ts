@@ -14,5 +14,6 @@ import { Association } from './entities/association.entity';
   ],
   controllers: [AssociationController],
   providers: [AssociationService],
+  exports: [AssociationService],
 })
 export class AssociationModule {}

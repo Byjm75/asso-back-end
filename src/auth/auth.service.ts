@@ -27,59 +27,90 @@ export class AuthService {
   ) {}
   //-----------------------------------------Donateur---------------------------------
   // Création d'un compte donateur
-  async createDonor(createDonorAuthDto: CreateDonorAuthDto): Promise<Donor> {
+  async createDonor(createDonorAuthDto: CreateDonorAuthDto) {
+    const { pseudo, surname, firstname, email, password, picture } =
+      createDonorAuthDto;
+    console.log(
+      "Ceci est l'objet donor---------------------------!!!!!",
+      createDonorAuthDto,
+    );
+    // hashage du mot de passe
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+    // création d'une entité donor
+    const donor = await this.donorRepository.save({
+      pseudo,
+      surname,
+      firstname,
+      email,
+      password: hashedPassword,
+      picture,
+      role: 'donor',
+    });
     try {
-      const roleDonor = await this.roleRepository.findOneBy({ role: 'donor' });
-      console.log('roleDonor ', roleDonor);
-      const createDonor = await this.donorRepository.save(createDonorAuthDto);
-      console.log(createDonor);
-      createDonor.role = roleDonor;
-      if (createDonor.role !== 'donor') {
-        throw new NotFoundException(`Pas un donor !!!`);
-      }
-      console.log('apres MAJ .role', createDonor);
-      // hashage du mot de passe
-      const saltRounds = 10;
-      const password = createDonor.password;
-      console.log('password: ', password);
-      const hashed = await bcrypt.hash(password, saltRounds);
-      createDonor.password = hashed;
-      return await this.donorRepository.save(createDonor);
+      const createdDonor = await this.donorRepository.save(donor);
+      return createdDonor;
     } catch (error) {
-      console.log('error----', error);
+      // gestion des erreurs
       if (error.code === '23505') {
-        throw new ConflictException("l'email et ou le pseudo déjà existant");
+        throw new ConflictException('username already exists');
       } else {
         throw new InternalServerErrorException();
       }
     }
   }
-  // Connexion d'un compte donateur
-  async loginDonor(loginDonorDto: LoginDonorDto) {
-    const donorFound = await this.donorRepository.findOneBy({
-      pseudo: loginDonorDto.pseudo,
-      email: loginDonorDto.email,
-    });
-    console.log('donorFound: ', donorFound);
-    if (
-      donorFound &&
-      (await bcrypt.compare(loginDonorDto.password, donorFound.password))
-    ) {
-      const payload = {
-        username: loginDonorDto.email,
-        role: donorFound.role,
-        id: donorFound.id,
-      };
-      console.log('payload: ', payload);
-      return {
-        access_token: this.jwtService.sign(payload),
-      };
-    } else {
-      throw new UnauthorizedException(
-        'Le couple email/password est incorrect!',
-      );
-    }
-  }
+  //   try {
+  //     const roleDonor = await this.roleRepository.findOne({ role: 'donor' });
+  //     console.log('roleDonor ', roleDonor);
+  //     const createDonor = await this.donorRepository.save(createDonorAuthDto);
+  //     console.log(createDonor);
+  //     createDonor.role = roleDonor;
+  //     if (createDonor.role !== 'donor') {
+  //       throw new NotFoundException(`Pas un donor !!!`);
+  //     }
+  //     console.log('apres MAJ .role', createDonor);
+  //     // hashage du mot de passe
+  //     const saltRounds = 10;
+  //     const password = createDonor.password;
+  //     console.log('password: ', password);
+  //     const hashed = await bcrypt.hash(password, saltRounds);
+  //     createDonor.password = hashed;
+  //     return await this.donorRepository.save(createDonor);
+  //   } catch (error) {
+  //     console.log('error----', error);
+  //     if (error.code === '23505') {
+  //       throw new ConflictException("l'email et ou le pseudo déjà existant");
+  //     } else {
+  //       throw new InternalServerErrorException();
+  //     }
+  //   }
+  // }
+  // // Connexion d'un compte donateur
+  // async loginDonor(loginDonorDto: LoginDonorDto) {
+  //   const donorFound = await this.donorRepository.findOneBy({
+  //     pseudo: loginDonorDto.pseudo,
+  //     email: loginDonorDto.email,
+  //   });
+  //   console.log('donorFound: ', donorFound);
+  //   if (
+  //     donorFound &&
+  //     (await bcrypt.compare(loginDonorDto.password, donorFound.password))
+  //   ) {
+  //     const payload = {
+  //       username: loginDonorDto.email,
+  //       role: donorFound.role,
+  //       id: donorFound.id,
+  //     };
+  //     console.log('payload: ', payload);
+  //     return {
+  //       access_token: this.jwtService.sign(payload),
+  //     };
+  //   } else {
+  //     throw new UnauthorizedException(
+  //       'Le couple email/password est incorrect!',
+  //     );
+  //   }
+
   //-----------------------------------------Association---------------------------------
   //Création d'un compte association
   async createrAsso(
