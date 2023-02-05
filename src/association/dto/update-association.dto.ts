@@ -54,6 +54,7 @@ export class UpdateAssociationDto extends PartialType(CreateAssoAuthDto) {
       '*Le mot de passe doit contenir une majuscule, une minuscule et un nombre',
   })
   password: string;
+  hashedPassword: string;
   //------------------------------------------------------Siret---------
   @IsOptional()
   @IsNotEmpty({
@@ -116,5 +117,5 @@ export class UpdateAssociationDto extends PartialType(CreateAssoAuthDto) {
   @IsOptional()
   @IsString()
   picture: string;
-  roleA: RoleEnumType.ASSO;
+  // role: RoleEnumType.ASSO;
 }

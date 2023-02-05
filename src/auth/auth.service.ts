@@ -2,7 +2,6 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
@@ -14,12 +13,12 @@ import { CreateDonorAuthDto } from './dto/create-donor.dto';
 import { CreateAssoAuthDto } from './dto/create-asso.dto';
 import { LoginDonorDto } from './dto/login-donor.dto';
 import { LoginAssoDto } from './dto/login-asso.dto';
+import { JwtService } from '@nestjs/jwt/dist';
 
 @Injectable()
 export class AuthService {
-  roleRepository: any;
-  jwtService: any;
   constructor(
+    private jwtService: JwtService,
     @InjectRepository(Donor)
     private donorRepository: Repository<Donor>,
     @InjectRepository(Association)
@@ -45,7 +44,6 @@ export class AuthService {
       email,
       password: hashedPassword,
       picture,
-      role: 'donor',
     });
     try {
       const createdDonor = await this.donorRepository.save(donor);
@@ -59,109 +57,78 @@ export class AuthService {
       }
     }
   }
-  //   try {
-  //     const roleDonor = await this.roleRepository.findOne({ role: 'donor' });
-  //     console.log('roleDonor ', roleDonor);
-  //     const createDonor = await this.donorRepository.save(createDonorAuthDto);
-  //     console.log(createDonor);
-  //     createDonor.role = roleDonor;
-  //     if (createDonor.role !== 'donor') {
-  //       throw new NotFoundException(`Pas un donor !!!`);
-  //     }
-  //     console.log('apres MAJ .role', createDonor);
-  //     // hashage du mot de passe
-  //     const saltRounds = 10;
-  //     const password = createDonor.password;
-  //     console.log('password: ', password);
-  //     const hashed = await bcrypt.hash(password, saltRounds);
-  //     createDonor.password = hashed;
-  //     return await this.donorRepository.save(createDonor);
-  //   } catch (error) {
-  //     console.log('error----', error);
-  //     if (error.code === '23505') {
-  //       throw new ConflictException("l'email et ou le pseudo déjà existant");
-  //     } else {
-  //       throw new InternalServerErrorException();
-  //     }
-  //   }
-  // }
   // // Connexion d'un compte donateur
-  // async loginDonor(loginDonorDto: LoginDonorDto) {
-  //   const donorFound = await this.donorRepository.findOneBy({
-  //     pseudo: loginDonorDto.pseudo,
-  //     email: loginDonorDto.email,
-  //   });
-  //   console.log('donorFound: ', donorFound);
-  //   if (
-  //     donorFound &&
-  //     (await bcrypt.compare(loginDonorDto.password, donorFound.password))
-  //   ) {
-  //     const payload = {
-  //       username: loginDonorDto.email,
-  //       role: donorFound.role,
-  //       id: donorFound.id,
-  //     };
-  //     console.log('payload: ', payload);
-  //     return {
-  //       access_token: this.jwtService.sign(payload),
-  //     };
-  //   } else {
-  //     throw new UnauthorizedException(
-  //       'Le couple email/password est incorrect!',
-  //     );
-  //   }
-
+  async loginDonor(loginDonorDto: LoginDonorDto) {
+    const { pseudo, email, password, role } = loginDonorDto;
+    const donor = await this.donorRepository.findOneBy({
+      email,
+    });
+    console.log('je veux ton pseudo------------!!!', pseudo);
+    console.log('je veux ton mail-----------!!!', email);
+    console.log('je veux ton mdp------------!!!', password);
+    console.log('je veux ton role-----------', role);
+    //Ici comparasaison du MP Hashé
+    if (donor && (await bcrypt.compare(password, donor.password))) {
+      const payload = { donor };
+      console.log('donor profil---------------!!!: ', donor);
+      //Ici envoie du Token d'accés
+      const accessToken = await this.jwtService.sign(payload);
+      return { accessToken };
+    } else {
+      throw new UnauthorizedException(
+        'Le couple email/password est incorrect!',
+      );
+    }
+  }
   //-----------------------------------------Association---------------------------------
   //Création d'un compte association
-  async createrAsso(
-    createAssoAuthDto: CreateAssoAuthDto,
-  ): Promise<Association> {
+  async createAsso(createAssoAuthDto: CreateAssoAuthDto) {
+    const { name, email, password, siret, rna, theme } = createAssoAuthDto;
+    console.log(
+      "Ceci est l'objet association---------------------------!!!!!",
+      createAssoAuthDto,
+    );
+    // hashage du mot de passe
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(password, salt);
+    // création d'une entité donor
+    const asso = await this.assoRepository.save({
+      name,
+      email,
+      password: hashedPassword,
+      siret,
+      rna,
+      theme,
+    });
     try {
-      const roleAsso = await this.roleRepository.findOneBy({ role: 'asso' });
-      console.log('roleDonor ', roleAsso);
-      const createAsso = await this.assoRepository.save(createAssoAuthDto);
-      console.log(createAsso);
-      createAsso.role = roleAsso;
-      if (createAsso.role !== 'asso') {
-        throw new NotFoundException(`Pas una association !!!`);
-      }
-      console.log('apres MAJ .role', createAsso);
-      // hashage du mot de passe
-      const saltRounds = 10;
-      const password = createAsso.password;
-      console.log('password: ', password);
-      const hashed = await bcrypt.hash(password, saltRounds);
-      createAsso.password = hashed;
-      return await this.assoRepository.save(createAsso);
+      const createdAsso = await this.assoRepository.save(asso);
+      return createdAsso;
     } catch (error) {
-      console.log('error----', error);
+      // gestion des erreurs
       if (error.code === '23505') {
-        throw new ConflictException("l'email et ou le pseudo déjà existant");
+        throw new ConflictException('username already exists');
       } else {
         throw new InternalServerErrorException();
       }
     }
   }
   // Connexion d'un compte association
-  async loginAsso(loginAssoDto: LoginAssoDto) {
-    const assoFound = await this.assoRepository.findOneBy({
-      name: loginAssoDto.name,
-      email: loginAssoDto.email,
+  async loginAsso(LoginAssoDto: LoginAssoDto) {
+    const { name, email, password, role } = LoginAssoDto;
+    const asso = await this.assoRepository.findOneBy({
+      email,
     });
-    console.log('assoFound: ', assoFound);
-    if (
-      assoFound &&
-      (await bcrypt.compare(loginAssoDto.password, assoFound.password))
-    ) {
-      const payload = {
-        asso: loginAssoDto.email,
-        role: assoFound.role,
-        id: assoFound.id,
-      };
-      console.log('payload: ', payload);
-      return {
-        access_token: this.jwtService.sign(payload),
-      };
+    console.log('je veux ton pseudo------------!!!', name);
+    console.log('je veux ton mail-----------!!!', email);
+    console.log('je veux ton mdp------------!!!', password);
+    console.log('je veux ton role-----------', role);
+    //Ici comparasaison du MP Hashé
+    if (asso && (await bcrypt.compare(password, asso.password))) {
+      const payload = { asso };
+      console.log('donor profil---------------!!!: ', asso);
+      //Ici envoie du Token d'accés
+      const accessToken = await this.jwtService.sign(payload);
+      return { accessToken };
     } else {
       throw new UnauthorizedException(
         'Le couple email/password est incorrect!',

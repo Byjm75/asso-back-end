@@ -1,5 +1,6 @@
 import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { Donor } from 'src/donor/entities/donor.entity';
 import { AuthService } from './auth.service';
 import { CreateAssoAuthDto } from './dto/create-asso.dto';
 import { CreateDonorAuthDto } from './dto/create-donor.dto';
@@ -9,13 +10,11 @@ import { LoginDonorDto } from './dto/login-donor.dto';
 //Dossier Authentification
 @Controller('auth')
 export class AuthController {
-  donorService: any;
-  assoService: any;
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
   ) {}
-
+  //-----------------------------------------Donateur---------------------------------
   // Ici le donateur créer son profil et ce log
   @Post('register/donor')
   createDonor(@Body() createDonorAuthDto: CreateDonorAuthDto) {
@@ -25,8 +24,7 @@ export class AuthController {
       createDonorAuthDto.surname &&
       createDonorAuthDto.firstname &&
       createDonorAuthDto.email &&
-      createDonorAuthDto.password &&
-      createDonorAuthDto.role
+      createDonorAuthDto.password
     )
       return this.authService.createDonor(createDonorAuthDto);
     else {
@@ -35,22 +33,18 @@ export class AuthController {
       );
     }
   }
-
-  // @Post('login/donor')
-  // async loginDonor(
-  //   @Body() donor: LoginDonorDto,
-  // ): Promise<{ access_token: string }> {
-  //   if (donor.pseudo && donor.email && donor.password) {
-  //     return this.authService.loginDonor(donor);
-  //   } else {
-  //     throw new BadRequestException(
-  //       `Les champs pseudo, email et/ou password n'ont pas été renseignés correctement!`,
-  //     );
-  //   }
-  // }
+  @Post('login/donor')
+  loginDonor(
+    @Body() loginDonorDto: LoginDonorDto,
+  ): Promise<{ accessToken: string }> {
+    if (loginDonorDto.pseudo && loginDonorDto.email && loginDonorDto.password) {
+      return this.authService.loginDonor(loginDonorDto);
+    }
+  }
+  //-----------------------------------------Association---------------------------------
   // Ici l'association créer son profil
   @Post('register/asso')
-  createrAsso(@Body() createAssoAuthDto: CreateAssoAuthDto) {
+  createAsso(@Body() createAssoAuthDto: CreateAssoAuthDto) {
     //On détermine les champs obligatoires à la création de compte
     if (
       createAssoAuthDto.name &&
@@ -60,20 +54,19 @@ export class AuthController {
       createAssoAuthDto.rna &&
       createAssoAuthDto.theme
     )
-      return this.authService.createrAsso(createAssoAuthDto);
+      return this.authService.createAsso(createAssoAuthDto);
     else {
       throw new BadRequestException(
         `Veuillez remplir tous les champs correctement !`,
       );
     }
   }
-
   @Post('login/asso')
-  async loginAsso(
-    @Body() asso: LoginAssoDto,
-  ): Promise<{ access_token: string }> {
-    if (asso.name && asso.email && asso.password) {
-      return this.authService.loginAsso(asso);
+  loginAsso(
+    @Body() LoginAssoDto: LoginAssoDto,
+  ): Promise<{ accessToken: string }> {
+    if (LoginAssoDto.name && LoginAssoDto.email && LoginAssoDto.password) {
+      return this.authService.loginAsso(LoginAssoDto);
     } else {
       throw new BadRequestException(
         `Les champs pseudo, email et/ou password n'ont pas été renseignés correctement!`,

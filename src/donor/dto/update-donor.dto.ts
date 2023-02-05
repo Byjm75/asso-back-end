@@ -83,9 +83,10 @@ export class UpdateDonorDto extends PartialType(CreateDonorAuthDto) {
       '*Le mot de passe doit contenir une majuscule, une minuscule et un nombre',
   })
   password: string;
+  hashedPassword: string;
   //----------------------------------------------------------------------------
   @IsOptional()
   @IsString()
   picture: string;
-  roleD: RoleEnumType.DONOR;
+  // roleD: RoleEnumType.DONOR;
 }

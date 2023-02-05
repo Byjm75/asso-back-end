@@ -17,12 +17,12 @@ export class AssociationService {
   ) {}
 
   //--------------RESERVER A L'ADMIN---------------------
-  findAll() {
-    return `This action returns all association`;
+  async findAllAsso(): Promise<Association[]> {
+    return await this.associationRepository.find();
   }
   //-------------------------------------------------------
 
-  async findOne(
+  async findOneAsso(
     idValue: string,
     association: Association,
   ): Promise<Association> {
@@ -40,73 +40,82 @@ export class AssociationService {
   //------------------------------------------------Update!!!!-------------
   async update(
     idValue: string,
-    updateAssociationDto: UpdateAssociationDto,
+    upDateAssoDto: UpdateAssociationDto,
     association: Association,
   ): Promise<Association> {
     const upDateAssociation = await this.associationRepository.findOneBy({
       id: idValue,
     });
-    console.log('id requête utilisateur', idValue);
-    console.log('id utilisateur', association.id);
+    console.log('id requête utilisateur---------------!!!', idValue);
+    console.log('id association-----------------------!!!', association.id);
 
-    if (upDateAssociation.id !== association.id) {
-      throw new MethodNotAllowedException(
-        "Vous n'êtes pas autorisé à modifier ces informations",
-      );
-    }
+    // if (upDateAssociation.id !== association.id) {
+    //   throw new MethodNotAllowedException(
+    //     "Vous n'êtes pas autorisé à modifier ces informations",
+    //   );
+    // }
     const { name, email, password, siret, rna, theme, url, body, picture } =
-      updateAssociationDto;
+      upDateAssoDto;
     try {
-      if (!updateAssociationDto.password) {
+      if (!upDateAssoDto.password) {
         upDateAssociation.password = upDateAssociation.password;
       } else {
         const salt = await bcrypt.genSalt();
         let hashedPassword = await bcrypt.hash(password, salt);
         upDateAssociation.password = hashedPassword;
       }
-      if (!updateAssociationDto.name) {
+      if (!upDateAssoDto.name) {
         upDateAssociation.name = upDateAssociation.name;
       } else {
-        upDateAssociation.name = upDateAssociation.name;
+        upDateAssociation.name = upDateAssoDto.name;
       }
-      if (!updateAssociationDto.email) {
+      if (!upDateAssoDto.email) {
         upDateAssociation.email = upDateAssociation.email;
       } else {
-        upDateAssociation.email = updateAssociationDto.email;
+        upDateAssociation.email = upDateAssoDto.email;
       }
-      if (!updateAssociationDto.siret) {
+      if (!upDateAssoDto.siret) {
         upDateAssociation.siret = upDateAssociation.siret;
       } else {
-        upDateAssociation.siret = updateAssociationDto.siret;
+        upDateAssociation.siret = upDateAssoDto.siret;
       }
-      if (!updateAssociationDto.rna) {
+      if (!upDateAssoDto.rna) {
         upDateAssociation.rna = upDateAssociation.rna;
       } else {
-        upDateAssociation.rna = updateAssociationDto.rna;
+        upDateAssociation.rna = upDateAssoDto.rna;
       }
-      if (!updateAssociationDto.theme) {
+      if (!upDateAssoDto.theme) {
         upDateAssociation.theme = upDateAssociation.theme;
       } else {
-        upDateAssociation.theme = updateAssociationDto.theme;
+        upDateAssociation.theme = upDateAssoDto.theme;
       }
-      if (!updateAssociationDto.url) {
+      if (!upDateAssoDto.url) {
         upDateAssociation.url = upDateAssociation.url;
       } else {
-        upDateAssociation.url = updateAssociationDto.url;
+        upDateAssociation.url = upDateAssoDto.url;
       }
-      if (!updateAssociationDto.body) {
+      if (!upDateAssoDto.body) {
         upDateAssociation.body = upDateAssociation.body;
       } else {
-        upDateAssociation.body = updateAssociationDto.body;
+        upDateAssociation.body = upDateAssoDto.body;
       }
-      if (!updateAssociationDto.picture) {
+      if (!upDateAssoDto.picture) {
         upDateAssociation.picture = upDateAssociation.picture;
       } else {
-        upDateAssociation.picture = updateAssociationDto.picture;
+        upDateAssociation.picture = upDateAssoDto.picture;
       }
       return await this.associationRepository.save(upDateAssociation);
     } catch {
       throw new Error("Autre erreur, merci de contacter l'administrateur");
     }
+  }
+  async remove(id: string): Promise<Association | string> {
+    const result = await this.associationRepository.delete({
+      id,
+    });
+    if (result.affected === 0) {
+      throw new NotFoundException(`pas d'association trouvée avec l'id:${id}`);
+    }
+    return `Cette action a supprmé l'association #${id}`;
   }
 }

@@ -10,9 +10,10 @@ import {
 } from 'typeorm';
 
 export enum RoleEnumType {
+  ASSO = 'asso',
   DONOR = 'donor',
+  ADMIN = 'admin',
 }
-
 @Entity()
 export class Donor {
   //Je génére la clé primaire
@@ -56,12 +57,11 @@ export class Donor {
   picture: string;
 
   @Column({
-    nullable: false,
-    // type: 'enum',
-    // enum: RoleEnumType,
-    // default: RoleEnumType.DONOR,
+    type: 'enum',
+    enum: RoleEnumType,
+    default: RoleEnumType.DONOR,
   })
-  role: string;
+  role: RoleEnumType;
 
   //Je relis les tables suivant leurs cardinalités et par les clés étrangéres.
   //Méthode du "ondelete en Cascade permet de supprimer les tables associées"

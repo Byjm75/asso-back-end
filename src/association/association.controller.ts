@@ -14,22 +14,22 @@ import { AssociationService } from './association.service';
 import { UpdateAssociationDto } from './dto/update-association.dto';
 import { Association } from './entities/association.entity';
 
-@Controller('association')
-@UseGuards(AuthGuard())
+@Controller('asso')
+// @UseGuards(AuthGuard())
 export class AssociationController {
   constructor(private readonly associationService: AssociationService) {}
 
-  @Get(':id')
-  findAll() {
-    return this.associationService.findAll();
+  @Get()
+  findAllAsso(): Promise<Association[]> {
+    return this.associationService.findAllAsso();
   }
   //-------------------------------------------------------
   @Get(':id')
-  findOne(
+  findOneAsso(
     @Param('id') id: string,
     @GetAsso() association: Association,
   ): Promise<Association> {
-    return this.associationService.findOne(id, association);
+    return this.associationService.findOneAsso(id, association);
   }
 
   @Patch(':id')
@@ -45,37 +45,8 @@ export class AssociationController {
       association,
     );
   }
+  @Delete(':id')
+  remove(@Param('id') id: string, @GetAsso() association: Association) {
+    return this.associationService.remove(id);
+  }
 }
-
-// @Delete(':id')
-// remove(@Param('id') id: string) {
-//   return this.associationService.remove(+id);
-// }
-
-//USER avec getUser
-// @Get()
-// findAll(@GetUser() user: Users) {
-//   return this.exercicesService.findAll(user);
-// }
-
-// //USER avec getUser
-// @Get(':id')
-// findOne(@Param('id') id: string, @GetUser() user: Users) {
-//   return this.exercicesService.findOne(+id, user);
-// }
-
-// //USER avec getUser
-// @Patch(':id')
-// update(
-//   @Param('id') id: string,
-//   @Body() updateExerciceDto: UpdateExerciceDto,
-//   @GetUser() user: Users,
-// ) {
-//   return this.exercicesService.update(+id, updateExerciceDto, user);
-// }
-
-// //USER avec getUser
-// @Delete(':id')
-// remove(@Param('id') id: string, @GetUser() user: Users) {
-//   return this.exercicesService.remove(+id, user);
-// }
