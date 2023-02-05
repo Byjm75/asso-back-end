@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Donor } from 'src/donor/entities/donor.entity';
 import { Project } from 'src/project/entities/project.entity';
@@ -20,36 +20,85 @@ export class DonationService {
   async create(
     createDonationDto: CreateDonationDto,
     donor: Donor,
-    project: Project,
   ): Promise<Donation> {
-    const { amount, by_month } = createDonationDto;
     const newDonation = await this.donationRepository.create({
       ...createDonationDto,
-      project_: project,
+      donor_: donor,
     });
     try {
-      if (createCategorieDto.title) {
-        newCategorie.title = createCategorieDto.title;
+      if (createDonationDto.amount) {
+        newDonation.amount = createDonationDto.amount;
       }
-      return await this.categorieRepository.save(newCategorie);
+      if (createDonationDto.by_month) {
+        newDonation.by_month = createDonationDto.by_month;
+      }
+      return await this.donationRepository.save(newDonation);
     } catch {
       throw new Error('erreur test');
     }
   }
 
-  findAll() {
-    return `This action returns all donation`;
+  async findAll(donor: Donor): Promise<Donation[]> {
+    const donationFound = await this.donationRepository.findBy({
+      donor_: donor,
+    });
+    console.log('donationFound', donationFound);
+    if (!donationFound) {
+      throw new NotFoundException(`Catérorie non trouvée`);
+    }
+    return donationFound;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} donation`;
+  async findOne(idValue: string, donor: Donor): Promise<Donation> {
+    const donationFound = await this.donationRepository.findOneBy({
+      id: idValue,
+      donor_: donor,
+    });
+    if (!donationFound) {
+      throw new NotFoundException(`Donation non trouvé avec l'id:${idValue}`);
+    }
+    return donationFound;
   }
 
-  update(id: number, updateDonationDto: UpdateDonationDto) {
-    return `This action updates a #${id} donation`;
+  async update(
+    idValue: string,
+    updateDonationDto: UpdateDonationDto,
+    donor: Donor,
+  ): Promise<Donation | string> {
+    console.log(idValue);
+    console.log('donor---------------!!!', donor);
+    const query = this.donationRepository.createQueryBuilder();
+    query.where({ id: idValue }).andWhere({ donor_: donor });
+    const updateDonation = await query.getOne();
+    console.log('TO UPDATE ', updateDonation);
+
+    if (!updateDonation) {
+      throw new NotFoundException(`Donation non trouvée avec l'id:${idValue}`);
+    }
+
+    try {
+      if (updateDonationDto.amount !== null) {
+        updateDonation.amount = updateDonationDto.amount;
+      }
+      if (updateDonationDto.by_month !== null) {
+        updateDonation.by_month = updateDonationDto.by_month;
+      }
+      return await this.projectRepository.save(updateDonation);
+    } catch {
+      throw new Error('autre erreur tâche');
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} donation`;
+  async remove(idValue: string, donor: Donor): Promise<Donation | string> {
+    const result = await this.donationRepository.delete({
+      donor_: donor,
+      id: idValue,
+    });
+    if (result.affected === 0) {
+      throw new NotFoundException(
+        `Donation non trouvé avec le titre:${idValue}`,
+      );
+    }
+    return `Cette action entraine la suppresion de la donation:${idValue}`;
   }
 }

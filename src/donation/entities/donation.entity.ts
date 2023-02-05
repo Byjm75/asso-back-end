@@ -36,7 +36,7 @@ export class Donation {
   @ManyToOne(() => Donor, (donors) => donors.donations, {
     onDelete: 'CASCADE',
     nullable: false,
-    eager: true,
+    // eager: true,
   })
   donor_: Donor;
 }

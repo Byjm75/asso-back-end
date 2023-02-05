@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsDataURI,
   IsNotEmpty,
   IsOptional,
@@ -37,4 +38,7 @@ export class CreateProjectDto {
   @IsOptional()
   @IsString()
   picture: string;
+  @IsOptional()
+  @IsBoolean()
+  favoris: boolean;
 }

@@ -35,6 +35,10 @@ export class Project {
     nullable: true,
   })
   picture: string;
+  @Column({
+    nullable: true,
+  })
+  favoris: boolean;
 
   //Je relis les tables suivant leurs cardinalités et par les clés étrangéres.
   //Méthode du "ondelete" en Cascade permet de supprimer les tables associées.

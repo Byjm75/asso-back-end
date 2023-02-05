@@ -45,10 +45,10 @@ export class DonationController {
   @Patch(':id')
   update(
     @Param('id') id: string,
-    @Body() updateDonorDto: UpdateDonorDto,
+    @Body() updateDonationDto: UpdateDonationDto,
     @GetDonor() donor: Donor,
-  ): Promise<Donation> {
-    return this.donationService.update(id, updateDonorDto, donor);
+  ): Promise<Donation | string> {
+    return this.donationService.update(id, updateDonationDto, donor);
   }
 
   @Delete(':id')

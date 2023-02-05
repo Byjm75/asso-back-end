@@ -1,5 +1,6 @@
 import { PartialType } from '@nestjs/mapped-types';
 import {
+  IsBoolean,
   IsDataURI,
   IsNotEmpty,
   IsOptional,
@@ -41,4 +42,7 @@ export class UpdateProjectDto extends PartialType(CreateProjectDto) {
   @IsOptional()
   @IsString()
   picture: string;
+  @IsOptional()
+  @IsBoolean()
+  favoris: boolean;
 }

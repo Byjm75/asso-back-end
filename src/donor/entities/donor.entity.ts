@@ -71,6 +71,7 @@ export class Donor {
 
   @OneToMany(() => Donation, (donations) => donations.donor_, {
     onDelete: 'CASCADE',
+    eager: true,
   })
   donations: Donation[];
 }
