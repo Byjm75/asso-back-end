@@ -15,15 +15,17 @@ export class ProjectService {
   constructor(
     @InjectRepository(Project)
     private projectRepository: Repository<Project>,
-  ) {}
+  ) // @InjectRepository(Project)
+  // private aassociationRepository: Repository<Association>,
+  {}
 
   async create(
     createProjectDto: CreateProjectDto,
-    // association: Association,
+    association: Association,
   ): Promise<Project> {
     const newProject = await this.projectRepository.create({
       ...createProjectDto,
-      // association_: association,
+      association_: association,
     });
     return await this.projectRepository.save(newProject);
   }

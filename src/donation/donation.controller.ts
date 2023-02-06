@@ -20,15 +20,16 @@ import { UpdateDonationDto } from './dto/update-donation.dto';
 import { Donation } from './entities/donation.entity';
 
 @Controller('donation')
-@UseGuards(AuthGuard())
 export class DonationController {
   constructor(private readonly donationService: DonationService) {}
 
   @Post()
+  @UseGuards(AuthGuard())
   create(
     @Body() createDonationDto: CreateDonationDto,
     @GetDonor() donor: Donor,
   ): Promise<Donation> {
+    console.log('association------------!!!', donor);
     return this.donationService.create(createDonationDto, donor);
   }
 

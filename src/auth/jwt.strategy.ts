@@ -29,19 +29,19 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
     if (!donor) throw new UnauthorizedException();
     console.log('validate', donor);
-
     return donor;
   }
-  // async validate(payload: any): Promise<Association> {
-  //   console.log('validate');
-  //   const idAssociationPayload = payload.association.id;
-  //   const asso: Association = await this.associationRepository.findOneBy({
-  //     id: idAssociationPayload,
-  //   });
-  //   if (!asso) throw new UnauthorizedException();
-  //   return asso;
-  // }
 }
+// async validate(payload: any): Promise<Association> {
+//   console.log('validate');
+//   const idAssociationPayload = payload.association.id;
+//   const asso: Association = await this.associationRepository.findOneBy({
+//     id: idAssociationPayload,
+//   });
+//   if (!asso) throw new UnauthorizedException();
+//   return asso;
+// }
+
 // @Injectable()
 // export class JwtStrategyAsso extends PassportStrategy(Strategy) {
 //   constructor(

@@ -12,9 +12,9 @@ export class DonationService {
   constructor(
     @InjectRepository(Donation)
     private donationRepository: Repository<Donation>,
-    @InjectRepository(Project)
-    private projectRepository: Repository<Project>,
-  ) {}
+  ) // @InjectRepository(Project)
+  // private projectRepository: Repository<Project>,
+  {}
   async create(
     createDonationDto: CreateDonationDto,
     donor: Donor,
@@ -71,7 +71,7 @@ export class DonationService {
       if (updateDonationDto.by_month !== null) {
         updateDonation.by_month = updateDonationDto.by_month;
       }
-      return await this.projectRepository.save(updateDonation);
+      return await this.donationRepository.save(updateDonation);
     } catch {
       throw new Error('autre erreur tâche');
     }

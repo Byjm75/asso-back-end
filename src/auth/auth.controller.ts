@@ -14,6 +14,7 @@ import { CreateDonorAuthDto } from './dto/create-donor.dto';
 import { LoginAssoDto } from './dto/login-asso.dto';
 import { LoginDonorDto } from './dto/login-donor.dto';
 import { GetDonor } from './get-user.decorator';
+// import { RoleEnumType } from './roles.decorator';
 
 //Dossier Authentification
 @Controller('auth')
@@ -44,9 +45,7 @@ export class AuthController {
   loginDonor(
     @Body() loginDonorDto: LoginDonorDto,
   ): Promise<{ accessToken: string }> {
-    if (loginDonorDto.pseudo && loginDonorDto.email && loginDonorDto.password) {
-      return this.authService.loginDonor(loginDonorDto);
-    }
+    return this.authService.loginDonor(loginDonorDto);
   }
   //-----------------------------------------Association---------------------------------
   // Ici l'association créer son profil

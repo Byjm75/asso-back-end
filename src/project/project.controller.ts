@@ -23,11 +23,13 @@ export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @Post()
+  @UseGuards(AuthGuard())
   create(
     @Body() createProjectDto: CreateProjectDto,
-    // @GetAsso() association: Association,
+    @GetAsso() association: Association,
   ): Promise<Project> {
-    return this.projectService.create(createProjectDto);
+    console.log('association------------!!!', association);
+    return this.projectService.create(createProjectDto, association);
   }
 
   @Get()
