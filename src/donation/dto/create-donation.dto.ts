@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsNumber, Min } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, Max, Min } from 'class-validator';
 
 export class CreateDonationDto {
   @IsNotEmpty({
@@ -7,6 +7,8 @@ export class CreateDonationDto {
   @IsNumber()
   @Min(1)
   amount: number;
+
+  @IsNotEmpty()
   @IsBoolean()
   by_month: boolean;
 }

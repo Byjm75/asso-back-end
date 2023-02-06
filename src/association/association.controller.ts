@@ -15,7 +15,7 @@ import { UpdateAssociationDto } from './dto/update-association.dto';
 import { Association } from './entities/association.entity';
 
 @Controller('asso')
-// @UseGuards(AuthGuard())
+@UseGuards(AuthGuard())
 export class AssociationController {
   constructor(private readonly associationService: AssociationService) {}
 

@@ -16,7 +16,7 @@ export class CreateProjectDto {
   @IsString({
     message: ' *le thème doit être une chaine de caractère',
   })
-  @MaxLength(10, {
+  @MaxLength(50, {
     message: '*Le texte doit contenir au maximum 50 caractères',
   })
   topic: string;
@@ -28,7 +28,7 @@ export class CreateProjectDto {
     message: ' *Le champ de texte doit être une chaine de caractère',
   })
   @MinLength(10, {
-    message: '*Le champ de texte doit contenir au moins 1 caractère',
+    message: '*Le champ de texte doit contenir au moins 10 caractères',
   })
   body: string;
   //-------------------------------------------------------------------

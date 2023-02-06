@@ -69,7 +69,7 @@ export class AuthService {
     console.log('je veux ton role-----------', role);
     //Ici comparasaison du MP Hashé
     if (donor && (await bcrypt.compare(password, donor.password))) {
-      const payload = { donor };
+      const payload = { donor, role: 'Donor' };
       console.log('donor profil---------------!!!: ', donor);
       //Ici envoie du Token d'accés
       const accessToken = await this.jwtService.sign(payload);
@@ -124,7 +124,7 @@ export class AuthService {
     console.log('je veux ton role-----------', role);
     //Ici comparasaison du MP Hashé
     if (asso && (await bcrypt.compare(password, asso.password))) {
-      const payload = { asso };
+      const payload = { asso, role: 'Association' };
       console.log('donor profil---------------!!!: ', asso);
       //Ici envoie du Token d'accés
       const accessToken = await this.jwtService.sign(payload);

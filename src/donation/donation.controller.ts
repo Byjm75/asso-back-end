@@ -7,7 +7,9 @@ import {
   Param,
   Delete,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Association } from 'src/association/entities/association.entity';
 import { GetAsso, GetDonor } from 'src/auth/get-user.decorator';
 import { UpdateDonorDto } from 'src/donor/dto/update-donor.dto';
@@ -18,6 +20,7 @@ import { UpdateDonationDto } from './dto/update-donation.dto';
 import { Donation } from './entities/donation.entity';
 
 @Controller('donation')
+@UseGuards(AuthGuard())
 export class DonationController {
   constructor(private readonly donationService: DonationService) {}
 

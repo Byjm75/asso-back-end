@@ -1,18 +1,25 @@
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  BadRequestException,
+  UseGuards,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { AuthGuard } from '@nestjs/passport';
 import { Donor } from 'src/donor/entities/donor.entity';
 import { AuthService } from './auth.service';
 import { CreateAssoAuthDto } from './dto/create-asso.dto';
 import { CreateDonorAuthDto } from './dto/create-donor.dto';
 import { LoginAssoDto } from './dto/login-asso.dto';
 import { LoginDonorDto } from './dto/login-donor.dto';
+import { GetDonor } from './get-user.decorator';
 
 //Dossier Authentification
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly authService: AuthService,
-    private readonly jwtService: JwtService,
+    private readonly authService: AuthService, // private readonly jwtService: JwtService,
   ) {}
   //-----------------------------------------Donateur---------------------------------
   // Ici le donateur créer son profil et ce log

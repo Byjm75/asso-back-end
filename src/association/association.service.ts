@@ -49,11 +49,11 @@ export class AssociationService {
     console.log('id requête utilisateur---------------!!!', idValue);
     console.log('id association-----------------------!!!', association.id);
 
-    // if (upDateAssociation.id !== association.id) {
-    //   throw new MethodNotAllowedException(
-    //     "Vous n'êtes pas autorisé à modifier ces informations",
-    //   );
-    // }
+    if (upDateAssociation.id !== association.id) {
+      throw new MethodNotAllowedException(
+        "Vous n'êtes pas autorisé à modifier ces informations",
+      );
+    }
     const { name, email, password, siret, rna, theme, url, body, picture } =
       upDateAssoDto;
     try {

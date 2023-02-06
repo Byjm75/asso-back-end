@@ -8,10 +8,13 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { PrimaryGeneratedColumn } from 'typeorm';
 import { CreateProjectDto } from './create-project.dto';
 
 //ICI je confirgure les éléments de la table qui peuvent être modifiés.
 export class UpdateProjectDto extends PartialType(CreateProjectDto) {
+  @PrimaryGeneratedColumn('uuid')
+  id?: string;
   @IsOptional()
   @IsNotEmpty({
     message: ' *Le thème doit être renseigné',

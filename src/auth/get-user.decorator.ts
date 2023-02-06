@@ -7,7 +7,7 @@ export const GetDonor = createParamDecorator(
   (_data, ctx: ExecutionContext): Donor => {
     const req = ctx.switchToHttp().getRequest();
     const donor: Donor = {
-      ...req.donor,
+      ...req.user,
     };
     return donor;
   },
@@ -17,7 +17,7 @@ export const GetAsso = createParamDecorator(
   (_data, ctx: ExecutionContext): Association => {
     const req = ctx.switchToHttp().getRequest();
     const asso: Association = {
-      ...req.asso,
+      ...req.user,
     };
     return asso;
   },

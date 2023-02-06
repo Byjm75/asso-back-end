@@ -67,6 +67,11 @@ export class Association {
   picture: string;
 
   @Column({
+    nullable: true,
+  })
+  favoris: boolean;
+
+  @Column({
     type: 'enum',
     enum: RoleEnumType,
     default: RoleEnumType.ASSO,

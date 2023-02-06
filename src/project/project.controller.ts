@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  BadRequestException,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -21,13 +22,12 @@ import { Project } from './entities/project.entity';
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
-  @Post('create')
+  @Post()
   create(
     @Body() createProjectDto: CreateProjectDto,
-    @GetAsso() association: Association,
-  ): Promise<Project | string> {
-    console.log('mais qui es tu ? ', association.email);
-    return this.projectService.create(createProjectDto, association);
+    // @GetAsso() association: Association,
+  ): Promise<Project> {
+    return this.projectService.create(createProjectDto);
   }
 
   @Get()
@@ -43,21 +43,17 @@ export class ProjectController {
     return this.projectService.findOne(id, association);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateProjectDto: UpdateProjectDto,
-    @GetAsso() association: Association,
-  ): Promise<Project | string> {
-    return this.projectService.update(id, updateProjectDto, association);
-  }
+  // @Patch(':id')
+  // update(
+  //   @Param('id') id: string,
+  //   @Body() updateProjectDto: UpdateProjectDto,
+  //   @GetAsso() association: Association,
+  // ): Promise<Project | string> {
+  //   return this.projectService.update(id, updateProjectDto, association);
+  // }
 
   @Delete(':id')
-  remove(
-    @Param('id') id: string,
-    @Body()
-    association: Association,
-  ) {
-    return this.projectService.remove(id, association);
+  remove(@Param('id') id: string) {
+    return this.projectService.remove(id);
   }
 }

@@ -16,28 +16,31 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private associationRepository: Repository<Association>,
   ) {
     super({
-      secretOrKey: 'jaimelesfairedons',
+      secretOrKey: 'jaimecequejefais',
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     });
   }
-  async validateDonor(payload: any): Promise<Donor> {
+
+  async validate(payload: any): Promise<Donor> {
     console.log('validate');
     const idDonorPayload = payload.donor.id;
     const donor: Donor = await this.donorRepository.findOneBy({
       id: idDonorPayload,
     });
     if (!donor) throw new UnauthorizedException();
+    console.log('validate', donor);
+
     return donor;
   }
-  async validateAsso(payload: any): Promise<Association> {
-    console.log('validate');
-    const idAssociationPayload = payload.association.id;
-    const asso: Association = await this.associationRepository.findOneBy({
-      id: idAssociationPayload,
-    });
-    if (!asso) throw new UnauthorizedException();
-    return asso;
-  }
+  // async validate(payload: any): Promise<Association> {
+  //   console.log('validate');
+  //   const idAssociationPayload = payload.association.id;
+  //   const asso: Association = await this.associationRepository.findOneBy({
+  //     id: idAssociationPayload,
+  //   });
+  //   if (!asso) throw new UnauthorizedException();
+  //   return asso;
+  // }
 }
 // @Injectable()
 // export class JwtStrategyAsso extends PassportStrategy(Strategy) {

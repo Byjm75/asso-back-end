@@ -21,6 +21,7 @@ export class Donation {
 
   @Column({
     nullable: false,
+    default: true,
   })
   by_month: boolean;
 

@@ -14,8 +14,6 @@ export class DonationService {
     private donationRepository: Repository<Donation>,
     @InjectRepository(Project)
     private projectRepository: Repository<Project>,
-    @InjectRepository(Donor)
-    private donorRepository: Repository<Donor>,
   ) {}
   async create(
     createDonationDto: CreateDonationDto,
@@ -25,17 +23,7 @@ export class DonationService {
       ...createDonationDto,
       donor_: donor,
     });
-    try {
-      if (createDonationDto.amount) {
-        newDonation.amount = createDonationDto.amount;
-      }
-      if (createDonationDto.by_month) {
-        newDonation.by_month = createDonationDto.by_month;
-      }
-      return await this.donationRepository.save(newDonation);
-    } catch {
-      throw new Error('erreur test');
-    }
+    return await this.donationRepository.save(newDonation);
   }
 
   async findAll(donor: Donor): Promise<Donation[]> {
