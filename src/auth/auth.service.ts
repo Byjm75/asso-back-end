@@ -73,7 +73,6 @@ export class AuthService {
     if (donor && (await bcrypt.compare(password, donor.password))) {
       const payload = { donor };
       console.log('donor profil---------------!!!: ', donor);
-      // console.log('donor profil---------------!!!: ', role);
       //Ici envoie du Token d'accés
       const accessToken = await this.jwtService.sign(payload);
       return { accessToken };

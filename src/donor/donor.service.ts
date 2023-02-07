@@ -12,23 +12,6 @@ export class DonorService {
     private DonorRepository: Repository<Donor>,
   ) {}
 
-  async findAllDonor(): Promise<Donor[]> {
-    return await this.DonorRepository.find();
-  }
-
-  async findOneDonor(idValue: string, donor: Donor): Promise<Donor> {
-    const assoFound = await this.DonorRepository.findOneBy({
-      id: idValue,
-    });
-    console.log('id du donateur----------------', donor.id);
-    if (!assoFound) {
-      throw new NotFoundException(
-        `pas de donateur trouvé avec l'id:${idValue}`,
-      );
-    }
-    return assoFound;
-  }
-
   async update(
     idValue: string,
     upDateDonorDto: UpdateDonorDto,
@@ -38,13 +21,7 @@ export class DonorService {
       id: idValue,
     });
     console.log('id requête utilisateur---------------!!!', idValue);
-    console.log('id association-----------------------!!!', donor.id);
-
-    // if (upDateAssociation.id !== association.id) {
-    //   throw new MethodNotAllowedException(
-    //     "Vous n'êtes pas autorisé à modifier ces informations",
-    //   );
-    // }
+    console.log('id requête utilisateur---------------!!!', donor);
     const { pseudo, surname, firstname, email, password, picture } =
       upDateDonorDto;
     try {
@@ -85,13 +62,33 @@ export class DonorService {
       throw new Error("Autre erreur, merci de contacter l'administrateur");
     }
   }
-  async remove(id: string): Promise<Donor | string> {
+  async remove(idValue: string, donor: Donor): Promise<Donor | string> {
     const result = await this.DonorRepository.delete({
-      id,
+      id: idValue,
     });
+    console.log('donoooooorrrrr!!!!!', donor);
     if (result.affected === 0) {
-      throw new NotFoundException(`pas de donateur trouvée avec l'id:${id}`);
+      throw new NotFoundException(
+        `pas de donateur trouvée avec l'id:${idValue}`,
+      );
     }
-    return `Cette action a supprmé le donateur #${id}`;
+    return `Cette action a supprmé le donateur #${idValue}`;
+  }
+  //---------------------------------------------------ADMIN----------
+  async findAllDonor(): Promise<Donor[]> {
+    return await this.DonorRepository.find();
+  }
+
+  async findOneDonor(idValue: string): Promise<Donor> {
+    const donorFound = await this.DonorRepository.findOneBy({
+      id: idValue,
+    });
+    console.log('id du donateur----------------', idValue);
+    if (!donorFound) {
+      throw new NotFoundException(
+        `pas de donateur trouvé avec l'id:${idValue}`,
+      );
+    }
+    return donorFound;
   }
 }

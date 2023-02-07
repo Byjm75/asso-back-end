@@ -23,15 +23,28 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: any): Promise<Donor> {
     console.log('validate');
+    const idAssociationPayload = payload.association.id;
+    const association: Association = await this.associationRepository.findOneBy(
+      {
+        id: idAssociationPayload,
+      },
+    );
     const idDonorPayload = payload.donor.id;
     const donor: Donor = await this.donorRepository.findOneBy({
       id: idDonorPayload,
     });
-    if (!donor) throw new UnauthorizedException();
-    console.log('validate', donor);
+    if (!association) {
+      throw new UnauthorizedException();
+    }
+    if (!donor) {
+      throw new UnauthorizedException();
+    } else association === null;
     return donor;
   }
 }
+// if (!association) {
+//   throw new UnauthorizedException();
+
 // async validate(payload: any): Promise<Association> {
 //   console.log('validate');
 //   const idAssociationPayload = payload.association.id;

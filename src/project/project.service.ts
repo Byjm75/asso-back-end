@@ -15,36 +15,37 @@ export class ProjectService {
   constructor(
     @InjectRepository(Project)
     private projectRepository: Repository<Project>,
-  ) // @InjectRepository(Project)
-  // private aassociationRepository: Repository<Association>,
-  {}
+    @InjectRepository(Association)
+    private associationRepository: Repository<Association>,
+  ) {}
 
   async create(
     createProjectDto: CreateProjectDto,
-    association: Association,
+    // association_: Association,
   ): Promise<Project> {
     const newProject = await this.projectRepository.create({
       ...createProjectDto,
-      association_: association,
+      // association_: association_,
     });
     return await this.projectRepository.save(newProject);
   }
-
-  async findAllProject(association: Association): Promise<Project[]> {
-    const projectFound = await this.projectRepository.findBy({
-      association_: association,
-    });
-    console.log('projectFound', projectFound);
-    if (!projectFound) {
-      throw new NotFoundException(`Catérorie non trouvée`);
-    }
-    return projectFound;
+  async findAll(): Promise<Project[]> {
+    return await this.projectRepository.find();
   }
+  // async findAllByAsso(idValue: string): Promise<Project[]> {
+  //   const projectFound = await this.projectRepository.findBy({
+  //     id: idValue,
+  //   });
+  //   console.log('projectFound', projectFound);
+  //   if (!projectFound) {
+  //     throw new NotFoundException(`Pas de projet trouvée`);
+  //   }
+  //   return projectFound;
+  // }
 
-  async findOne(idValue: string, association: Association): Promise<Project> {
+  async findOne(idValue: string): Promise<Project> {
     const projectFound = await this.projectRepository.findOneBy({
       id: idValue,
-      association_: association,
     });
     if (!projectFound) {
       throw new NotFoundException(
@@ -57,10 +58,10 @@ export class ProjectService {
   // async update(
   //   idValue: string,
   //   updateProjectDto: UpdateProjectDto,
-  //   association: Association,
+  //   // association: Association,
   // ): Promise<Project | string> {
   //   console.log(idValue);
-  //   console.log('Association---------------!!!', association);
+  //   // console.log('Association---------------!!!', association);
   //   const projectToUpdate = await this.findOne(idValue, association);
   //   if (updateProjectDto.id !== association.id) {
   //     throw new MethodNotAllowedException(
@@ -68,7 +69,7 @@ export class ProjectService {
   //     );
   //   }
   //   console.log('id requête utilisateur---------------!!!', idValue);
-  //   console.log('id association-----------------------!!!', association.id);
+  //   // console.log('id association-----------------------!!!', association.id);
   //   const project = await this.projectRepository.findOneBy({
   //     id: updateProjectDto.id,
   //   });

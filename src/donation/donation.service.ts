@@ -12,9 +12,9 @@ export class DonationService {
   constructor(
     @InjectRepository(Donation)
     private donationRepository: Repository<Donation>,
-  ) // @InjectRepository(Project)
-  // private projectRepository: Repository<Project>,
-  {}
+    @InjectRepository(Project)
+    private projectRepository: Repository<Project>,
+  ) {}
   async create(
     createDonationDto: CreateDonationDto,
     donor: Donor,

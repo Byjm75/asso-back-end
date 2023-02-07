@@ -6,11 +6,12 @@ import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
 import { Project } from './entities/project.entity';
 import { Donor } from 'src/donor/entities/donor.entity';
 import { Association } from 'src/association/entities/association.entity';
+import { Donation } from 'src/donation/entities/donation.entity';
 
 @Module({
   imports: [
     AuthModule,
-    TypeOrmModule.forFeature([Project, Association, Donor]),
+    TypeOrmModule.forFeature([Project, Association, Donor, Donation]),
   ],
   controllers: [ProjectController],
   providers: [ProjectService],

@@ -16,20 +16,15 @@ export class AssociationService {
     private associationRepository: Repository<Association>,
   ) {}
 
-  //--------------RESERVER A L'ADMIN---------------------
   async findAllAsso(): Promise<Association[]> {
     return await this.associationRepository.find();
   }
-  //-------------------------------------------------------
 
-  async findOneAsso(
-    idValue: string,
-    association: Association,
-  ): Promise<Association> {
+  async findOneAsso(idValue: string): Promise<Association> {
     const assoFound = await this.associationRepository.findOneBy({
       id: idValue,
     });
-    console.log('id association----------------', association.id);
+    console.log('id association----------------', idValue);
     if (!assoFound) {
       throw new NotFoundException(
         `pas d'association trouvé avec l'id:${idValue}`,
@@ -41,21 +36,14 @@ export class AssociationService {
   async update(
     idValue: string,
     upDateAssoDto: UpdateAssociationDto,
-    association: Association,
+    // association: Association,
   ): Promise<Association> {
     const upDateAssociation = await this.associationRepository.findOneBy({
       id: idValue,
     });
     console.log('id requête utilisateur---------------!!!', idValue);
-    console.log('id association-----------------------!!!', association.id);
-
-    if (upDateAssociation.id !== association.id) {
-      throw new MethodNotAllowedException(
-        "Vous n'êtes pas autorisé à modifier ces informations",
-      );
-    }
-    const { name, email, password, siret, rna, theme, url, body, picture } =
-      upDateAssoDto;
+    // console.log('id association-----------------------!!!', association);
+    const { name, email, password, theme, url, body, picture } = upDateAssoDto;
     try {
       if (!upDateAssoDto.password) {
         upDateAssociation.password = upDateAssociation.password;
@@ -73,16 +61,6 @@ export class AssociationService {
         upDateAssociation.email = upDateAssociation.email;
       } else {
         upDateAssociation.email = upDateAssoDto.email;
-      }
-      if (!upDateAssoDto.siret) {
-        upDateAssociation.siret = upDateAssociation.siret;
-      } else {
-        upDateAssociation.siret = upDateAssoDto.siret;
-      }
-      if (!upDateAssoDto.rna) {
-        upDateAssociation.rna = upDateAssociation.rna;
-      } else {
-        upDateAssociation.rna = upDateAssoDto.rna;
       }
       if (!upDateAssoDto.theme) {
         upDateAssociation.theme = upDateAssociation.theme;

@@ -20,7 +20,8 @@ import { GetDonor } from './get-user.decorator';
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly authService: AuthService, // private readonly jwtService: JwtService,
+    private readonly authService: AuthService,
+    private readonly jwtService: JwtService,
   ) {}
   //-----------------------------------------Donateur---------------------------------
   // Ici le donateur créer son profil et ce log

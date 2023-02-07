@@ -23,35 +23,34 @@ export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @Post()
-  @UseGuards(AuthGuard())
   create(
     @Body() createProjectDto: CreateProjectDto,
-    @GetAsso() association: Association,
-  ): Promise<Project> {
-    console.log('association------------!!!', association);
-    return this.projectService.create(createProjectDto, association);
+    // @GetAsso() association: Association,
+  ) {
+    console.log('project------------!!!', createProjectDto);
+    return this.projectService.create(createProjectDto);
   }
-
   @Get()
-  findAllProject(@GetAsso() association: Association): Promise<Project[]> {
-    return this.projectService.findAllProject(association);
+  findAll() {
+    return this.projectService.findAll();
   }
+  // @Get(':id')
+  // findAllByAsso(@Param('id') association_: Association) {
+  //   return this.projectService.findAllByAsso(association_);
+  // }
 
   @Get(':id')
-  findOne(
-    @Param('id') id: string,
-    @GetAsso() association: Association,
-  ): Promise<Project> {
-    return this.projectService.findOne(id, association);
+  findOne(@Param('id') id: string) {
+    return this.projectService.findOne(id);
   }
 
   // @Patch(':id')
   // update(
   //   @Param('id') id: string,
   //   @Body() updateProjectDto: UpdateProjectDto,
-  //   @GetAsso() association: Association,
+  //   // @GetAsso() association: Association,
   // ): Promise<Project | string> {
-  //   return this.projectService.update(id, updateProjectDto, association);
+  //   return this.projectService.update(id, updateProjectDto);
   // }
 
   @Delete(':id')

@@ -6,7 +6,9 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { GetDonor } from 'src/auth/get-user.decorator';
 import { DonorService } from './donor.service';
 import { UpdateDonorDto } from './dto/update-donor.dto';
@@ -15,20 +17,8 @@ import { Donor } from './entities/donor.entity';
 export class DonorController {
   constructor(private readonly donorService: DonorService) {}
 
-  @Get()
-  findAllDonor(): Promise<Donor[]> {
-    return this.donorService.findAllDonor();
-  }
-
-  @Get(':id')
-  findOneDonor(
-    @Param('id') id: string,
-    @GetDonor() donor: Donor,
-  ): Promise<Donor> {
-    return this.donorService.findOneDonor(id, donor);
-  }
-
   @Patch(':id')
+  @UseGuards(AuthGuard())
   update(
     @Param('id') id: string,
     @Body() updateDonorDto: UpdateDonorDto,
@@ -39,7 +29,18 @@ export class DonorController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard())
   remove(@Param('id') id: string, @GetDonor() donor: Donor) {
-    return this.donorService.remove(id);
+    return this.donorService.remove(id, donor);
+  }
+  //--------------------------------------------ADMIN------------------
+  @Get('admin')
+  findAllDonor(): Promise<Donor[]> {
+    return this.donorService.findAllDonor();
+  }
+
+  @Get('admin/:id')
+  findOneDonor(@Param('id') id: string): Promise<Donor> {
+    return this.donorService.findOneDonor(id);
   }
 }

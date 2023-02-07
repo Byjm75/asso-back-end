@@ -46,7 +46,7 @@ export class Project {
   @ManyToOne(() => Association, (associations) => associations.projects, {
     onDelete: 'CASCADE',
     nullable: false,
-    // eager: true,
+    eager: true,
   })
   association_: Association;
 

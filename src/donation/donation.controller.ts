@@ -29,7 +29,7 @@ export class DonationController {
     @Body() createDonationDto: CreateDonationDto,
     @GetDonor() donor: Donor,
   ): Promise<Donation> {
-    console.log('association------------!!!', donor);
+    console.log('donateur------------!!!', donor);
     return this.donationService.create(createDonationDto, donor);
   }
 
