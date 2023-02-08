@@ -13,7 +13,6 @@ import { CreateAssoAuthDto } from './dto/create-asso.dto';
 import { CreateDonorAuthDto } from './dto/create-donor.dto';
 import { LoginAssoDto } from './dto/login-asso.dto';
 import { LoginDonorDto } from './dto/login-donor.dto';
-import { GetDonor } from './get-user.decorator';
 // import { RoleEnumType } from './roles.decorator';
 
 //Dossier Authentification
@@ -27,52 +26,28 @@ export class AuthController {
   // Ici le donateur créer son profil et ce log
   @Post('register/donor')
   createDonor(@Body() createDonorAuthDto: CreateDonorAuthDto) {
-    //On détermine les champs obligatoires à la création de compte
-    if (
-      createDonorAuthDto.pseudo &&
-      createDonorAuthDto.surname &&
-      createDonorAuthDto.firstname &&
-      createDonorAuthDto.email &&
-      createDonorAuthDto.password
-    )
-      return this.authService.createDonor(createDonorAuthDto);
-    else {
-      throw new BadRequestException(
-        `Veuillez remplir tous les champs correctement !`,
-      );
-    }
+    return this.authService.createDonor(createDonorAuthDto);
   }
+
   @Post('login/donor')
-  loginDonor(
+  async loginDonor(
     @Body() loginDonorDto: LoginDonorDto,
   ): Promise<{ accessToken: string }> {
     return this.authService.loginDonor(loginDonorDto);
   }
   //-----------------------------------------Association---------------------------------
   // Ici l'association créer son profil
-  @Post('register/asso')
+  @Post('register/association')
   createAsso(@Body() createAssoAuthDto: CreateAssoAuthDto) {
     //On détermine les champs obligatoires à la création de compte
-    if (
-      createAssoAuthDto.name &&
-      createAssoAuthDto.email &&
-      createAssoAuthDto.password &&
-      createAssoAuthDto.siret &&
-      createAssoAuthDto.rna &&
-      createAssoAuthDto.theme
-    )
-      return this.authService.createAsso(createAssoAuthDto);
-    else {
-      throw new BadRequestException(
-        `Veuillez remplir tous les champs correctement !`,
-      );
-    }
+    return this.authService.createAsso(createAssoAuthDto);
   }
+
   @Post('login/asso')
   loginAsso(
     @Body() LoginAssoDto: LoginAssoDto,
   ): Promise<{ accessToken: string }> {
-    if (LoginAssoDto.name && LoginAssoDto.email && LoginAssoDto.password) {
+    if (LoginAssoDto.email && LoginAssoDto.password) {
       return this.authService.loginAsso(LoginAssoDto);
     } else {
       throw new BadRequestException(

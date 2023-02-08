@@ -5,12 +5,13 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsUrl,
   Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
 import { CreateAssoAuthDto } from 'src/auth/dto/create-asso.dto';
-import { RoleEnumType } from '../entities/association.entity';
+import { RoleEnumType } from 'src/auth/roles.decorator';
 
 export class UpdateAssociationDto extends PartialType(CreateAssoAuthDto) {
   //------------------------------------------------------nom---------
@@ -55,42 +56,6 @@ export class UpdateAssociationDto extends PartialType(CreateAssoAuthDto) {
   })
   password: string;
   hashedPassword: string;
-  //------------------------------------------------------Siret---------
-  // @IsOptional()
-  // @IsNotEmpty({
-  //   message: ' *Le Siret ne peux pas être vide',
-  // })
-  // @IsString({
-  //   message: ' *Le Siret doit être une chaine de caractère',
-  // })
-  // @MinLength(1, {
-  //   message: '*Le Siret doit contenir au moins 1 caractère',
-  // })
-  // @MaxLength(14, {
-  //   message: '*Le Siret doit contenir au max 14 caractères',
-  // })
-  // @Matches(/^(?=.*[A-Z])(?=.*[0-9])/, {
-  //   message: '*Le Siret doit contenir une majuscule et un nombre',
-  // })
-  // siret: string;
-  //------------------------------------------------------Rna---------
-  // @IsOptional()
-  // @IsNotEmpty({
-  //   message: ' *Le Rna ne peux pas être vide',
-  // })
-  // @IsString({
-  //   message: ' *Le Rna doit être une chaine de caractère',
-  // })
-  // @MinLength(1, {
-  //   message: '*Le Rna doit contenir au moins 1 caractère',
-  // })
-  // @MaxLength(10, {
-  //   message: '*Le Rna doit contenir au max 10 caractères',
-  // })
-  // @Matches(/^(?=.*[A-Z])(?=.*[0-9])/, {
-  //   message: '*Le Rna doit contenir une majuscule et un nombre',
-  // })
-  // rna: string;
   //------------------------------------------------------thème---------
   @IsOptional()
   @IsNotEmpty({
@@ -102,8 +67,8 @@ export class UpdateAssociationDto extends PartialType(CreateAssoAuthDto) {
   theme: string;
   //---------------------------------------------------------------------
   @IsOptional()
-  @IsDataURI()
-  url: string;
+  @IsUrl()
+  website: string;
   //------------------------------------------------------body---------
   @IsOptional()
   @IsString({
@@ -117,5 +82,5 @@ export class UpdateAssociationDto extends PartialType(CreateAssoAuthDto) {
   @IsOptional()
   @IsString()
   picture: string;
-  // role: RoleEnumType.ASSO;
+  role: RoleEnumType.ASSOCIATION;
 }

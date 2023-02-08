@@ -32,16 +32,6 @@ export class ProjectService {
   async findAll(): Promise<Project[]> {
     return await this.projectRepository.find();
   }
-  // async findAllByAsso(idValue: string): Promise<Project[]> {
-  //   const projectFound = await this.projectRepository.findBy({
-  //     id: idValue,
-  //   });
-  //   console.log('projectFound', projectFound);
-  //   if (!projectFound) {
-  //     throw new NotFoundException(`Pas de projet trouvée`);
-  //   }
-  //   return projectFound;
-  // }
 
   async findOne(idValue: string): Promise<Project> {
     const projectFound = await this.projectRepository.findOneBy({

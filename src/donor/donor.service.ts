@@ -37,16 +37,16 @@ export class DonorService {
       } else {
         upDateDonor.pseudo = upDateDonorDto.pseudo;
       }
-      if (!upDateDonorDto.surname) {
-        upDateDonor.surname = upDateDonor.surname;
-      } else {
-        upDateDonor.surname = upDateDonorDto.surname;
-      }
-      if (!upDateDonorDto.firstname) {
-        upDateDonor.firstname = upDateDonor.firstname;
-      } else {
-        upDateDonor.firstname = upDateDonorDto.firstname;
-      }
+      // if (!upDateDonorDto.surname) {
+      //   upDateDonor.surname = upDateDonor.surname;
+      // } else {
+      //   upDateDonor.surname = upDateDonorDto.surname;
+      // }
+      // if (!upDateDonorDto.firstname) {
+      //   upDateDonor.firstname = upDateDonor.firstname;
+      // } else {
+      //   upDateDonor.firstname = upDateDonorDto.firstname;
+      // }
       if (!upDateDonorDto.email) {
         upDateDonor.email = upDateDonor.email;
       } else {

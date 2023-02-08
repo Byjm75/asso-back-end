@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetDonor } from 'src/auth/get-user.decorator';
+import { GetUser } from 'src/auth/get-user.decorator';
 import { DonorService } from './donor.service';
 import { UpdateDonorDto } from './dto/update-donor.dto';
 import { Donor } from './entities/donor.entity';
@@ -22,7 +22,7 @@ export class DonorController {
   update(
     @Param('id') id: string,
     @Body() updateDonorDto: UpdateDonorDto,
-    @GetDonor() donor: Donor,
+    @GetUser() donor: Donor,
   ): Promise<Donor> {
     console.log(donor);
     return this.donorService.update(id, updateDonorDto, donor);
@@ -30,7 +30,7 @@ export class DonorController {
 
   @Delete(':id')
   @UseGuards(AuthGuard())
-  remove(@Param('id') id: string, @GetDonor() donor: Donor) {
+  remove(@Param('id') id: string, @GetUser() donor: Donor) {
     return this.donorService.remove(id, donor);
   }
   //--------------------------------------------ADMIN------------------

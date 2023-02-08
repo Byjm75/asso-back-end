@@ -6,7 +6,7 @@ import {
   MinLength,
   MaxLength,
   IsOptional,
-  IsDataURI,
+  IsUrl,
 } from 'class-validator';
 // import { RoleEnumType } from '../roles.decorator';
 
@@ -47,7 +47,7 @@ export class CreateAssoAuthDto {
   })
   @Matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/, {
     message:
-      '*Le mot de passe doit contenir une majuscule, une minuscule et un nombre',
+      '*Le mot de passe doit contenir une Majuscule, une minuscule et un nombre',
   })
   password: string;
   //------------------------------------------------------Siret---------
@@ -57,14 +57,14 @@ export class CreateAssoAuthDto {
   @IsString({
     message: ' *le Siret doit être une chaine de caractère',
   })
-  @MinLength(1, {
-    message: '*Le Siret doit contenir au moins 1 caractère',
-  })
+  // @MinLength(1, {
+  //   message: '*Le Siret doit contenir au moins 1 caractère',
+  // })
   @MaxLength(14, {
     message: '*Le Siret doit contenir au maximum 14 caractères',
   })
   @Matches(/^(?=.*[A-Z])(?=.*[0-9])/, {
-    message: '*Le Siret doit contenir une majuscule et un nombre',
+    message: '*Le Siret doit contenir une Majuscule et un nombre',
   })
   siret: string;
   //------------------------------------------------------Rna---------
@@ -74,9 +74,9 @@ export class CreateAssoAuthDto {
   @IsString({
     message: ' *le Rna doit être une chaine de caractère',
   })
-  @MinLength(1, {
-    message: '*Le Rna doit contenir au moins 1 caractère',
-  })
+  // @MinLength(1, {
+  //   message: '*Le Rna doit contenir au moins 1 caractère',
+  // })
   @MaxLength(10, {
     message: '*Le Rna doit contenir au max 10 caractères',
   })
@@ -92,13 +92,13 @@ export class CreateAssoAuthDto {
     message: ' *Le thème doit être une chaine de caractère',
   })
   @MaxLength(50, {
-    message: '*Le thème doit contenir au max 10 caractères',
+    message: '*Le thème doit contenir au max 50 caractères',
   })
   theme: string;
   //-------------------------------------------------------------------
   @IsOptional()
-  @IsDataURI()
-  url: string;
+  @IsUrl()
+  website: string;
   //---------------------------------------------------body------------
   @IsOptional()
   @IsString({

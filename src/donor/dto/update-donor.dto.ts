@@ -8,7 +8,6 @@ import {
   MinLength,
 } from 'class-validator';
 import { CreateDonorAuthDto } from 'src/auth/dto/create-donor.dto';
-import { RoleEnumType } from '../entities/donor.entity';
 
 export class UpdateDonorDto extends PartialType(CreateDonorAuthDto) {
   //-----------------------------------------------------pseudo--------
@@ -27,35 +26,35 @@ export class UpdateDonorDto extends PartialType(CreateDonorAuthDto) {
   })
   pseudo: string;
   //------------------------------------------------------prénom---------
-  @IsOptional()
-  @IsNotEmpty({
-    message: ' *Le prénom ne peux pas être vide',
-  })
-  @IsString({
-    message: ' *Le prénom doit être une chaine de caractère',
-  })
-  @Matches(/^[A-Za-z]*$/, {
-    message: "*Le prénom ne doit pas contenir d'espace",
-  })
-  @MinLength(1, {
-    message: ' *Le prénom doit contenir au moins un caractère ',
-  })
-  surname: string;
-  //------------------------------------------------------nom---------
-  @IsOptional()
-  @IsNotEmpty({
-    message: ' *Le nom ne peux pas être vide',
-  })
-  @IsString({
-    message: ' *Le nom doit être une chaine de caractère',
-  })
-  @Matches(/^[A-Za-z]*$/, {
-    message: "*Le nom ne doit pas contenir d'espace",
-  })
-  @MinLength(1, {
-    message: ' *Le nom doit contenir au moins un caractère ',
-  })
-  firstname: string;
+  // @IsOptional()
+  // @IsNotEmpty({
+  //   message: ' *Le prénom ne peux pas être vide',
+  // })
+  // @IsString({
+  //   message: ' *Le prénom doit être une chaine de caractère',
+  // })
+  // @Matches(/^[A-Za-z]*$/, {
+  //   message: "*Le prénom ne doit pas contenir d'espace",
+  // })
+  // @MinLength(1, {
+  //   message: ' *Le prénom doit contenir au moins un caractère ',
+  // })
+  // surname: string;
+  // //------------------------------------------------------nom---------
+  // @IsOptional()
+  // @IsNotEmpty({
+  //   message: ' *Le nom ne peux pas être vide',
+  // })
+  // @IsString({
+  //   message: ' *Le nom doit être une chaine de caractère',
+  // })
+  // @Matches(/^[A-Za-z]*$/, {
+  //   message: "*Le nom ne doit pas contenir d'espace",
+  // })
+  // @MinLength(1, {
+  //   message: ' *Le nom doit contenir au moins un caractère ',
+  // })
+  // firstname: string;
   //------------------------------------------------------email---------
   @IsOptional()
   @IsNotEmpty({

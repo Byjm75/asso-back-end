@@ -1,4 +1,5 @@
 import { Association } from 'src/association/entities/association.entity';
+import { RoleEnumType } from 'src/auth/roles.decorator';
 import { Donation } from 'src/donation/entities/donation.entity';
 import {
   Column,
@@ -9,11 +10,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-export enum RoleEnumType {
-  ASSO = 'asso',
-  DONOR = 'donor',
-  ADMIN = 'admin',
-}
 @Entity()
 export class Donor {
   //Je génére la clé primaire

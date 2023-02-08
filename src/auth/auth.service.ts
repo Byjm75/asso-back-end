@@ -7,20 +7,20 @@ import {
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Association } from 'src/association/entities/association.entity';
-import { Donor, RoleEnumType } from 'src/donor/entities/donor.entity';
 import { Repository } from 'typeorm';
 import { CreateDonorAuthDto } from './dto/create-donor.dto';
 import { CreateAssoAuthDto } from './dto/create-asso.dto';
 import { LoginDonorDto } from './dto/login-donor.dto';
 import { LoginAssoDto } from './dto/login-asso.dto';
 import { JwtService } from '@nestjs/jwt/dist';
+import { Donor } from 'src/donor/entities/donor.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private jwtService: JwtService,
     @InjectRepository(Donor)
     private donorRepository: Repository<Donor>,
-    private jwtService: JwtService,
     @InjectRepository(Association)
     private assoRepository: Repository<Association>,
   ) {}
@@ -60,20 +60,17 @@ export class AuthService {
   }
   // // Connexion d'un compte donateur
   async loginDonor(loginDonorDto: LoginDonorDto) {
-    // const role = RoleEnumType.DONOR;
-    const { pseudo, email, password } = loginDonorDto;
+    const { email, password } = loginDonorDto;
     const donor = await this.donorRepository.findOneBy({
-      pseudo,
+      email,
     });
-    // console.log('je veux ton role-----------', role);
-    console.log('je veux ton pseudo------------!!!', pseudo);
     console.log('je veux ton mail-----------!!!', email);
     console.log('je veux ton mdp------------!!!', password);
     //Ici comparasaison du MP Hashé
     if (donor && (await bcrypt.compare(password, donor.password))) {
       const payload = { donor };
-      console.log('donor profil---------------!!!: ', donor);
-      //Ici envoie du Token d'accés
+      console.log('donor profil---------------!!!: ', payload);
+      //Ici envoie du Token d'accés si authorisé
       const accessToken = await this.jwtService.sign(payload);
       return { accessToken };
     } else {
@@ -116,19 +113,18 @@ export class AuthService {
   }
   // Connexion d'un compte association
   async loginAsso(LoginAssoDto: LoginAssoDto) {
-    const { name, email, password } = LoginAssoDto;
+    const { email, password } = LoginAssoDto;
     const asso = await this.assoRepository.findOneBy({
-      name,
+      email,
     });
-    console.log('je veux ton pseudo------------!!!', name);
+    console.log('asso--------------!!!!!', asso);
     console.log('je veux ton mail-----------!!!', email);
     console.log('je veux ton mdp------------!!!', password);
-    // console.log('je veux ton role-----------', role);
     //Ici comparasaison du MP Hashé
     if (asso && (await bcrypt.compare(password, asso.password))) {
       const payload = { asso };
-      console.log('donor profil---------------!!!: ', asso);
-      //Ici envoie du Token d'accés
+      console.log('asso profil---------------!!!: ', payload);
+      //Ici envoie du Token d'accés si autorisé
       const accessToken = await this.jwtService.sign(payload);
       return { accessToken };
     } else {

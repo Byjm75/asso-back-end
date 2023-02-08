@@ -1,10 +1,6 @@
+import { RoleEnumType } from 'src/auth/roles.decorator';
 import { Project } from 'src/project/entities/project.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-
-export enum RoleEnumType {
-  ASSO = 'asso',
-  DONOR = 'donor',
-}
 
 @Entity()
 export class Association {
@@ -54,7 +50,7 @@ export class Association {
   @Column({
     nullable: true,
   })
-  url: string;
+  website: string;
 
   @Column({
     nullable: true,
@@ -74,7 +70,7 @@ export class Association {
   @Column({
     type: 'enum',
     enum: RoleEnumType,
-    default: RoleEnumType.ASSO,
+    default: RoleEnumType.ASSOCIATION,
   })
   role: RoleEnumType;
 

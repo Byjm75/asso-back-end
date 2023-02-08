@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Association } from 'src/association/entities/association.entity';
-import { GetAsso, GetDonor } from 'src/auth/get-user.decorator';
+import { GetUser } from 'src/auth/get-user.decorator';
 import { UpdateDonorDto } from 'src/donor/dto/update-donor.dto';
 import { Donor } from 'src/donor/entities/donor.entity';
 import { DonationService } from './donation.service';
@@ -27,22 +27,19 @@ export class DonationController {
   @UseGuards(AuthGuard())
   create(
     @Body() createDonationDto: CreateDonationDto,
-    @GetDonor() donor: Donor,
+    @GetUser() donor: Donor,
   ): Promise<Donation> {
     console.log('donateur------------!!!', donor);
     return this.donationService.create(createDonationDto, donor);
   }
 
   @Get()
-  findAll(@GetDonor() donor: Donor): Promise<Donation[]> {
+  findAll(@GetUser() donor: Donor): Promise<Donation[]> {
     return this.donationService.findAll(donor);
   }
 
   @Get(':id')
-  findOne(
-    @Param('id') id: string,
-    @GetDonor() donor: Donor,
-  ): Promise<Donation> {
+  findOne(@Param('id') id: string, @GetUser() donor: Donor): Promise<Donation> {
     return this.donationService.findOne(id, donor);
   }
 
@@ -50,7 +47,7 @@ export class DonationController {
   update(
     @Param('id') id: string,
     @Body() updateDonationDto: UpdateDonationDto,
-    @GetDonor() donor: Donor,
+    @GetUser() donor: Donor,
   ): Promise<Donation | string> {
     return this.donationService.update(id, updateDonationDto, donor);
   }
