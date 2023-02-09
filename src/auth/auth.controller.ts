@@ -1,19 +1,10 @@
-import {
-  Controller,
-  Post,
-  Body,
-  BadRequestException,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { AuthGuard } from '@nestjs/passport';
-import { Donor } from 'src/donor/entities/donor.entity';
 import { AuthService } from './auth.service';
 import { CreateAssoAuthDto } from './dto/create-asso.dto';
 import { CreateDonorAuthDto } from './dto/create-donor.dto';
 import { LoginAssoDto } from './dto/login-asso.dto';
 import { LoginDonorDto } from './dto/login-donor.dto';
-// import { RoleEnumType } from './roles.decorator';
 
 //Dossier Authentification
 @Controller('auth')

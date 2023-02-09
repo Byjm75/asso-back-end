@@ -38,16 +38,10 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(password, salt);
     // création d'une entité donor
     const donor = await this.donorRepository.create({
-      pseudo,
-      surname,
-      firstname,
-      email,
-      password: hashedPassword,
-      picture,
+      ...createDonorAuthDto,
     });
     try {
       const createdDonor = await this.donorRepository.save(donor);
-      delete createdDonor.password;
       return createdDonor;
     } catch (error) {
       // gestion des erreurs
@@ -105,7 +99,7 @@ export class AuthService {
     } catch (error) {
       // gestion des erreurs
       if (error.code === '23505') {
-        throw new ConflictException('username already exists');
+        throw new ConflictException('Le nom du donateur existe déja');
       } else {
         throw new InternalServerErrorException();
       }

@@ -1,72 +1,62 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
   Delete,
   UseGuards,
-  ForbiddenException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/get-user.decorator';
-import { RoleEnumType, Roles } from 'src/auth/roles.decorator';
-import { Donor } from 'src/donor/entities/donor.entity';
+import { GetAsso } from 'src/auth/get-user.decorator';
 import { AssociationService } from './association.service';
 import { UpdateAssociationDto } from './dto/update-association.dto';
 import { Association } from './entities/association.entity';
 
 @Controller('association')
+//Toutes les routes sont accessibles uniquement avec un Token
+@UseGuards(AuthGuard('jwt'))
 export class AssociationController {
   constructor(private readonly associationService: AssociationService) {}
 
+  //Fonctionne avec un jwt. Cela retourne bien un tableau des associations de la BBD.
   @Get()
-  findAllAsso(): Promise<Association[]> {
+  async findAll(): Promise<Association[]> {
     return this.associationService.findAllAsso();
   }
-  //-------------------------------------------------------
+  //Trouve une association via son id que l'on soit donor ou association
   @Get(':id')
-  @UseGuards(AuthGuard('jwt'))
-  async findOneAsso(
-    @Param('id') id: string,
-    @GetUser() user: Donor | Association,
-  ): Promise<Association> {
-    return this.associationService.findOneAsso(id, user);
+  async findOne(@Param('id') id: string): Promise<Association> {
+    console.log('idddddd Controllers-------------!!!!!!!!!!', id);
+    console.log('Promise Association-------------!!!!!!!!!!', Association);
+    return this.associationService.findOneAsso(id);
   }
 
-  // @Get(':id')
-  // findOneAsso(@Param('id') id: string) {
-  //   return this.associationService.findOneAsso(id);
-  // }
-
+  //Uniquement l'association avec son ID peut modifier son profil
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'))
-  async updateAssociation(
+  async update(
     @Param('id') id: string,
     @Body() updateAssociationDto: UpdateAssociationDto,
-  ) {
-    return this.associationService.update(id, updateAssociationDto);
+    @GetAsso() association: Association,
+  ): Promise<Association> {
+    console.log('idddddd-Param-Controllers-------------!!!!!!!!!!', id);
+    console.log(
+      'UpdateAssociationDto-Controllers------------!!!!!!!!!!',
+      updateAssociationDto,
+    );
+    console.log('@GetAsso-Controllers-------------!!!!!!!!!!', association);
+    return this.associationService.updateAsso(
+      id,
+      updateAssociationDto,
+      association,
+    );
+  }
+
+  //Uniquement l'association avec son ID peut supprimer son profil
+  @Delete(':id')
+  async delete(@Param('id') id: string, @GetAsso() association: Association) {
+    console.log('idddddd-Param-Controllers-------------!!!!!!!!!!', id);
+    console.log('association!!!!!', association);
+    return this.associationService.deleteAsso(id, association);
   }
 }
-// @Patch(':id')
-// @UseGuards(AuthGuard())
-// async updateAssociation(
-//   @Param('id') id: string,
-//   @Body() updateAssociationDto: UpdateAssociationDto,
-//   @GetUser() association: Association,
-// ): Promise<Association> {
-//   console.log('getuser asso.Asso!!!!!!!!!!!!!!!!', association);
-//   return this.associationService.updateAssociation(
-//     id,
-//     updateAssociationDto,
-//     association,
-//   );
-// }
-// @Delete(':id')
-// @UseGuards(AuthGuard())
-// remove(@Param('id') id: string, @GetUser() association: Association) {
-//   return this.associationService.remove(id, association);
-// }
-//}

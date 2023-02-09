@@ -1,7 +1,6 @@
 import {
   ForbiddenException,
   Injectable,
-  MethodNotAllowedException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -10,45 +9,55 @@ import { Repository } from 'typeorm';
 import { UpdateAssociationDto } from './dto/update-association.dto';
 import { Association } from './entities/association.entity';
 import * as bcrypt from 'bcrypt';
-import { Donor } from 'src/donor/entities/donor.entity';
 
 @Injectable()
 export class AssociationService {
   constructor(
     @InjectRepository(Association)
-    private associationRepository: Repository<Association>,
+    private readonly associationRepository: Repository<Association>,
   ) {}
-
+  //En fonction
   async findAllAsso(): Promise<Association[]> {
     return await this.associationRepository.find();
   }
-  async findOneAsso(
-    id: string,
-    user: Donor | Association,
-  ): Promise<Association> {
-    if (!user) {
-      throw new UnauthorizedException(
-        'Vous devez être connecté pour accéder à ces données',
-      );
-    }
-    const association = await this.associationRepository.findOneBy({ id });
+  //En fonction
+  async findOneAsso(idValue: string): Promise<Association> {
+    const association = await this.associationRepository.findOneBy({
+      id: idValue,
+    });
+    console.log('idValue-Service-------------!!!!!!!!', association);
     if (!association) {
-      throw new NotFoundException(`Aucune association trouvée avec l'id ${id}`);
+      throw new NotFoundException(
+        `Aucune association trouvée avec l'id ${idValue}`,
+      );
     }
     return association;
   }
-  //------------------------------------------------Update!!!!-------------
-
-  async update(
+  //En fonction
+  async updateAsso(
     idValue: string,
     upDateAssoDto: UpdateAssociationDto,
+    association: Association,
   ): Promise<Association> {
+    //Je m'assure que seule cette association puisse modifier son profil
+    if (association.id !== idValue) {
+      throw new ForbiddenException(
+        "Vous n'êtes pas autorisé à supprimer ce compte.",
+      );
+    }
     const upDateAssociation = await this.associationRepository.findOne({
       where: { id: idValue },
     });
-    console.log('UUUUUPDATE', upDateAssociation);
+    console.log(
+      'upDateAssociation-via-IdValue-Service-------------!!!!!!!!!!',
+      upDateAssociation,
+    );
+    console.log(
+      'asso: Utilisateur,-Service-------------!!!!!!!!!!',
+      association,
+    );
     if (!upDateAssociation) {
-      throw new NotFoundException('Association not found');
+      throw new NotFoundException("L'association n'existe pas");
     }
     const { name, email, password, theme, website, body, picture } =
       upDateAssoDto;
@@ -81,18 +90,29 @@ export class AssociationService {
       throw new Error(error);
     }
   }
+  //En fonction
+  async deleteAsso(
+    idValue: string,
+    association: Association,
+  ): Promise<Association | string> {
+    //Je m'assure que seul cette association puisse supprimer son profil
+    if (association.id !== idValue) {
+      throw new ForbiddenException(
+        "Vous n'êtes pas autorisé à supprimer ce compte.",
+      );
+    }
+    const assoRemove = await this.associationRepository.delete({
+      id: idValue,
+    });
+    console.log('IdValue-Service-------------!!!!!!!!!!', idValue);
+    console.log(
+      'asso: Utilisateur,-Service-------------!!!!!!!!!!',
+      association,
+    );
+
+    if (assoRemove.affected === 0) {
+      throw new NotFoundException("Cette association n'existe pas!");
+    }
+    return `Cette action a supprmé l'association #${idValue}`;
+  }
 }
-//   async remove(
-//     id: string,
-//     association: Association,
-//   ): Promise<Association | string> {
-//     const result = await this.associationRepository.delete({
-//       id,
-//     });
-//     console.log('id association-----------------------!!!', association);
-//     if (result.affected === 0) {
-//       throw new NotFoundException(`pas d'association trouvée avec l'id:${id}`);
-//     }
-//     return `Cette action a supprmé l'association #${id}`;
-//   }
-// }

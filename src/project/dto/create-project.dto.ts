@@ -1,9 +1,8 @@
 import {
-  IsBoolean,
-  IsDataURI,
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsUrl,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -33,12 +32,12 @@ export class CreateProjectDto {
   body: string;
   //-------------------------------------------------------------------
   @IsOptional()
-  @IsDataURI()
-  url: string;
+  @IsUrl()
+  website: string;
   @IsOptional()
   @IsString()
   picture: string;
   @IsOptional()
-  @IsBoolean()
-  favoris: boolean;
+  @IsString()
+  favoris: string;
 }

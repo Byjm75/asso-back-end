@@ -1,10 +1,9 @@
 import { PartialType } from '@nestjs/mapped-types';
 import {
-  IsBoolean,
-  IsDataURI,
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsUrl,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -15,6 +14,7 @@ import { CreateProjectDto } from './create-project.dto';
 export class UpdateProjectDto extends PartialType(CreateProjectDto) {
   @PrimaryGeneratedColumn('uuid')
   id?: string;
+  //-----------------------------------------------------
   @IsOptional()
   @IsNotEmpty({
     message: ' *Le thème doit être renseigné',
@@ -22,7 +22,7 @@ export class UpdateProjectDto extends PartialType(CreateProjectDto) {
   @IsString({
     message: ' *le thème doit être une chaine de caractère',
   })
-  @MaxLength(10, {
+  @MaxLength(50, {
     message: '*Le texte doit contenir au maximum 50 caractères',
   })
   topic: string;
@@ -35,17 +35,17 @@ export class UpdateProjectDto extends PartialType(CreateProjectDto) {
     message: ' *Le champ de texte doit être une chaine de caractère',
   })
   @MinLength(10, {
-    message: '*Le champ de texte doit contenir au moins 1 caractère',
+    message: '*Le champ de texte doit contenir au moins 10 caractère',
   })
   body: string;
   //-------------------------------------------------------------------
   @IsOptional()
-  @IsDataURI()
-  url: string;
+  @IsUrl()
+  website: string;
   @IsOptional()
   @IsString()
   picture: string;
   @IsOptional()
-  @IsBoolean()
-  favoris: boolean;
+  @IsString()
+  favoris: string;
 }

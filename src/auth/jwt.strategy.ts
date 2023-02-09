@@ -7,47 +7,6 @@ import { Donor } from 'src/donor/entities/donor.entity';
 import { Repository } from 'typeorm';
 import { RoleEnumType } from './roles.decorator';
 
-//Création de la méthode du JWT
-@Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(
-    @InjectRepository(Donor)
-    private donorRepository: Repository<Donor>,
-    @InjectRepository(Association)
-    private associationRepository: Repository<Association>,
-  ) {
-    super({
-      secretOrKey: 'jaimecequejefais',
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    });
-  }
-  async validate(payload: any): Promise<Donor | Association> {
-    console.log('PAYLOAD : ', payload);
-    if (payload.donor && payload.donor.role === RoleEnumType.DONOR) {
-      const idDonorPayload = payload.id;
-      const donor = await this.donorRepository.findOneBy({
-        id: idDonorPayload,
-      });
-      if (!donor) {
-        throw new UnauthorizedException();
-      }
-      return donor;
-    }
-    if (payload.asso && payload.asso.role === RoleEnumType.ASSOCIATION) {
-      console.log('Victoire');
-      const idAssociationPayload = payload.id;
-      const association = await this.associationRepository.findOneBy({
-        id: idAssociationPayload,
-      });
-      if (!association) {
-        throw new UnauthorizedException();
-      }
-      return association;
-    }
-
-    throw new UnauthorizedException();
-  }
-}
 // @Injectable()
 // export class JwtStrategy extends PassportStrategy(Strategy) {
 //   constructor(
@@ -61,76 +20,84 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 //       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
 //     });
 //   }
-//   async validate(payload: any): Promise<Donor | Association> {
-//     console.log('validate');
-//     console.log('payload!!!!!!!!!!!!', payload);
-//     if (payload.donor.role === 'donor') {
-//       const idDonorPayload = payload.id;
+
+//   async validate(payload: any) {
+//     if (payload.hasOwnProperty('donor')) {
+//       // Validate for donor
+//       const idDonorPayload = payload.donor.id;
 //       const donor = await this.donorRepository.findOneBy({
 //         id: idDonorPayload,
 //       });
 //       if (!donor) {
-//         throw new UnauthorizedException();
+//         throw new UnauthorizedException(
+//           `Le Donateur avec l'id "${idDonorPayload}" n'a pas été trouvé.`,
+//         );
 //       }
 //       return donor;
-//     }
-//     if (payload.asso.role === 'asso') {
-//       const idAssociationPayload = payload.id;
+//     } else if (payload.hasOwnProperty('asso')) {
+//       // Validate for association
+//       const idAssociationPayload = payload.asso.id;
 //       const association = await this.associationRepository.findOneBy({
 //         id: idAssociationPayload,
 //       });
 //       if (!association) {
-//         throw new UnauthorizedException();
+//         throw new UnauthorizedException(
+//           `L'Association avec l'id "${idAssociationPayload}" n'a pas été trouvée.`,
+//         );
 //       }
 //       return association;
+//     } else {
+//       throw new UnauthorizedException(
+//         `Veuillez vous enregistrer et vous connecter`,
+//       );
 //     }
-
-//     throw new UnauthorizedException();
-//   }
-//}
-// async validate(payload: any): Promise<Donor> {
-//   console.log('validate');
-//   const idDonorPayload = payload.donor.id;
-//   const donor: Donor = await this.donorRepository.findOneBy({
-//     id: idDonorPayload,
-//   });
-//   if (!donor) {
-//     throw new UnauthorizedException();
-//   }
-//   return donor;
-// }
-
-// if (!association) {
-//   throw new UnauthorizedException();
-
-// async validate(payload: any): Promise<Association> {
-//   console.log('validate');
-//   const idAssociationPayload = payload.association.id;
-//   const asso: Association = await this.associationRepository.findOneBy({
-//     id: idAssociationPayload,
-//   });
-//   if (!asso) throw new UnauthorizedException();
-//   return asso;
-// }
-
-// @Injectable()
-// export class JwtStrategyAsso extends PassportStrategy(Strategy) {
-//   constructor(
-//     @InjectRepository(Association)
-//     private associationRepository: Repository<Association>,
-//   ) {
-//     super({
-//       secretOrKey: 'jadoreLeCodeQuandCaFonctionneBien',
-//       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-//     });
-//   }
-//   async validate(payload: any): Promise<Association> {
-//     console.log('validate');
-//     const idAssociationPayload = payload.association.id;
-//     const asso: Association = await this.associationRepository.findOneBy({
-//       id: idAssociationPayload,
-//     });
-//     if (!asso) throw new UnauthorizedException();
-//     return asso;
 //   }
 // }
+// NE FONCTION PAS. NE FAIT PAS LA DIFFERENCE ENTRE DONOR ET ASSOCIATION
+@Injectable()
+export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor(
+    @InjectRepository(Donor)
+    private donorRepository: Repository<Donor>,
+    @InjectRepository(Association)
+    private associationRepository: Repository<Association>,
+  ) {
+    super({
+      secretOrKey: 'jaimecequejefais',
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    });
+  }
+  async validate(payload: any) {
+    if (payload.donor && payload.donor.role === RoleEnumType.DONOR) {
+      console.log('PAYLOAD---DONOR---------!!!!!!!! : ', payload);
+      const idDonorPayload = payload.donor.id;
+      const donor = await this.donorRepository.findOneBy({
+        id: idDonorPayload,
+      });
+      if (!donor) {
+        throw new UnauthorizedException(
+          `Le Donateur avec l'id "${donor}" n'a pas été trouvée.`,
+        );
+      }
+      return donor;
+    }
+    if (payload.asso && payload.asso.role === RoleEnumType.ASSOCIATION) {
+      console.log('PAYLOAD---ASSO------!!!!!!!!! : ', payload);
+      const idAssociationPayload = payload.asso.id;
+      const association = await this.associationRepository.findOneBy({
+        id: idAssociationPayload,
+      });
+      console.log('association------!!!!!!!!! : ', association);
+
+      if (!association) {
+        throw new UnauthorizedException(
+          `L'Association avec l'id "${association}" n'a pas été trouvée.`,
+        );
+      }
+      return association;
+    }
+    throw new UnauthorizedException(
+      `Veuillez vous enregistrez et vous connectez`,
+    );
+  }
+}

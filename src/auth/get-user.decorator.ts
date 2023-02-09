@@ -6,29 +6,23 @@ export interface Utilisateur {
   donor?: Donor;
   association?: Association;
 }
-
-export const GetUser = createParamDecorator(
-  (_data, ctx: ExecutionContext): Utilisateur => {
+export const GetDonor = createParamDecorator(
+  (_data, ctx: ExecutionContext): Donor => {
     const req = ctx.switchToHttp().getRequest();
-    const user: Utilisateur = {
-      donor: req.user.donor,
-      association: req.user.association,
-    };
-    return user;
+    console.log('req--- !!!!!!!!', req);
+    const donor = req.user;
+    console.log('req.user--- !!!!!!!!', req.user);
+    console.log('donor = req.user-----------!!!!!!!!!!!!', donor);
+    return donor;
   },
 );
-
-// //création de la méthode Getuser pour Donor
-// export const GetDonor = createParamDecorator(
-//   (_data, ctx: ExecutionContext): Donor => {
-//     const req = ctx.switchToHttp().getRequest();
-//     return req.user as Donor;
-//   },
-// );
-
-// export const GetAsso = createParamDecorator(
-//   (_data, ctx: ExecutionContext): Association => {
-//     const req = ctx.switchToHttp().getRequest();
-//     return req.user as Association;
-//   },
-// );
+export const GetAsso = createParamDecorator(
+  (_data, ctx: ExecutionContext): Association => {
+    const req = ctx.switchToHttp().getRequest();
+    console.log('req--- !!!!!!!!', req);
+    const asso = req.user;
+    console.log('req.user--- !!!!!!!!', req.user);
+    console.log('asso = req.user-----------!!!!!!!!!!!!', asso);
+    return asso;
+  },
+);

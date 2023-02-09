@@ -65,7 +65,7 @@ export class Association {
   @Column({
     nullable: true,
   })
-  favoris: boolean;
+  favoris: string;
 
   @Column({
     type: 'enum',

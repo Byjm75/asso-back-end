@@ -1,6 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
 import {
-  IsDataURI,
   IsEmail,
   IsNotEmpty,
   IsOptional,

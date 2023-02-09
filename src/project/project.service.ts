@@ -1,5 +1,8 @@
 import {
+  ConflictException,
+  ForbiddenException,
   Injectable,
+  InternalServerErrorException,
   MethodNotAllowedException,
   NotFoundException,
 } from '@nestjs/common';
@@ -16,34 +19,51 @@ export class ProjectService {
     @InjectRepository(Project)
     private projectRepository: Repository<Project>,
     @InjectRepository(Association)
-    private associationRepository: Repository<Association>,
+    private assoRepository: Repository<Association>,
   ) {}
-
-  async create(
+  //-------------------Association créer un projet----------------------
+  async createProject(
+    // idValue: string,
     createProjectDto: CreateProjectDto,
-    // association_: Association,
+    association_: Association,
   ): Promise<Project> {
+    //Je m'assure que seule cette association puisse créer son projet
+    // if (association_.id !== idValue) {
+    //   throw new ForbiddenException(
+    //     "Vous n'êtes pas autorisé à créer ce project.",
+    //   );
+    // }
     const newProject = await this.projectRepository.create({
       ...createProjectDto,
-      // association_: association_,
+      association_,
     });
-    return await this.projectRepository.save(newProject);
-  }
-  async findAll(): Promise<Project[]> {
-    return await this.projectRepository.find();
-  }
-
-  async findOne(idValue: string): Promise<Project> {
-    const projectFound = await this.projectRepository.findOneBy({
-      id: idValue,
-    });
-    if (!projectFound) {
-      throw new NotFoundException(
-        `Project non trouvé avec le titre:${idValue}`,
-      );
+    try {
+      const createdProject = await this.projectRepository.save(newProject);
+      return createdProject;
+    } catch (error) {
+      // gestion des erreurs
+      if (error.code === '23505') {
+        throw new ConflictException('Le projet existe déja !');
+      } else {
+        throw new InternalServerErrorException();
+      }
     }
-    return projectFound;
   }
+  // async findAll(): Promise<Project[]> {
+  //   return await this.projectRepository.find();
+  // }
+
+  // async findOne(idValue: string): Promise<Project> {
+  //   const projectFound = await this.projectRepository.findOneBy({
+  //     id: idValue,
+  //   });
+  //   if (!projectFound) {
+  //     throw new NotFoundException(
+  //       `Project non trouvé avec le titre:${idValue}`,
+  //     );
+  //   }
+  //   return projectFound;
+  // }
 
   // async update(
   //   idValue: string,
@@ -92,15 +112,15 @@ export class ProjectService {
   //   }
   // }
 
-  async remove(idValue: string): Promise<Project | string> {
-    const result = await this.projectRepository.delete({
-      id: idValue,
-    });
-    if (result.affected === 0) {
-      throw new NotFoundException(
-        `Project non trouvé avec le titre:${idValue}`,
-      );
-    }
-    return `Cette action entraine la suppresion du projet:${idValue}`;
-  }
+  // async remove(idValue: string): Promise<Project | string> {
+  //   const result = await this.projectRepository.delete({
+  //     id: idValue,
+  //   });
+  //   if (result.affected === 0) {
+  //     throw new NotFoundException(
+  //       `Project non trouvé avec le titre:${idValue}`,
+  //     );
+  //   }
+  //   return `Cette action entraine la suppresion du projet:${idValue}`;
+  // }
 }

@@ -7,8 +7,8 @@ import {
   MaxLength,
   IsOptional,
   IsUrl,
+  Length,
 } from 'class-validator';
-// import { RoleEnumType } from '../roles.decorator';
 
 // Ici la class et propriétés nécessaire à la création d'un compte
 export class CreateAssoAuthDto {
@@ -57,14 +57,12 @@ export class CreateAssoAuthDto {
   @IsString({
     message: ' *le Siret doit être une chaine de caractère',
   })
-  // @MinLength(1, {
-  //   message: '*Le Siret doit contenir au moins 1 caractère',
-  // })
-  @MaxLength(14, {
-    message: '*Le Siret doit contenir au maximum 14 caractères',
+  @Length(14, 14, {
+    message: '*Le Siret doit contenir exactement 14 caractères',
   })
-  @Matches(/^(?=.*[A-Z])(?=.*[0-9])/, {
-    message: '*Le Siret doit contenir une Majuscule et un nombre',
+  @Matches(/^[A-Z][0-9]{13}$/, {
+    message:
+      '*Le Siret doit commencer par une majuscule et contenir 13 chiffres',
   })
   siret: string;
   //------------------------------------------------------Rna---------
@@ -74,14 +72,11 @@ export class CreateAssoAuthDto {
   @IsString({
     message: ' *le Rna doit être une chaine de caractère',
   })
-  // @MinLength(1, {
-  //   message: '*Le Rna doit contenir au moins 1 caractère',
-  // })
-  @MaxLength(10, {
-    message: '*Le Rna doit contenir au max 10 caractères',
+  @Length(10, 10, {
+    message: '*Le Siret doit contenir exactement une Majuscule et 13 chiffres',
   })
-  @Matches(/^(?=.*[A-Z])(?=.*[0-9])/, {
-    message: '*Le Rna doit contenir une majuscule et un nombre',
+  @Matches(/^[A-Z][0-9]{9}$/, {
+    message: '*Le Rna doit contenir exactement une Majuscule et 9 chiffres',
   })
   rna: string;
   //------------------------------------------------------thème---------
@@ -112,5 +107,4 @@ export class CreateAssoAuthDto {
   @IsOptional()
   @IsString()
   picture: string;
-  // role: RoleEnumType.ASSOCIATION;
 }
