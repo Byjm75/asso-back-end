@@ -3,6 +3,7 @@ import {
   IsOptional,
   IsString,
   IsUrl,
+  IsUUID,
   MaxLength,
   MinLength,
 } from 'class-validator';
@@ -40,4 +41,7 @@ export class CreateProjectDto {
   @IsOptional()
   @IsString()
   favoris: string;
+  @IsNotEmpty()
+  @IsUUID()
+  association_id: string;
 }

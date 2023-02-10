@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  BadRequestException,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -22,36 +21,47 @@ import { GetAsso } from 'src/auth/get-user.decorator';
 @UseGuards(AuthGuard('jwt'))
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
-
-  @Post('project')
+  //--------------Uniquement une association peut créer un projet-----------------------
+  @Post(':id')
   async create(
+    @Param('id') id: string,
     @Body() createProjectDto: CreateProjectDto,
-    @GetAsso() association_: Association,
-  ): Promise<Project> {
+    @GetAsso() association: Association,
+  ) {
     console.log('project------------!!!', createProjectDto);
-    return this.projectService.createProject(createProjectDto, association_);
+    return this.projectService.createProject(id, createProjectDto, association);
   }
-  //   @Get()
-  //   findAll() {
-  //     return this.projectService.findAll();
-  //   }
+  @Get()
+  findAll() {
+    return this.projectService.findAllProject();
+  }
 
-  //   @Get(':id')
-  //   findOne(@Param('id') id: string) {
-  //     return this.projectService.findOne(id);
-  //   }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.projectService.findOneProject(id);
+  }
 
-  //   @Patch(':id')
-  //   update(
-  //     @Param('id') id: string,
-  //     @Body() updateProjectDto: UpdateProjectDto,
-  //     @GetUser() association: Association,
-  //   ): Promise<Project | string> {
-  //     return this.projectService.update(id, updateProjectDto);
-  //   }
+  //Uniquement l'association avec son ID peut modifier son projet
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() updateProjectDto: UpdateProjectDto,
+    @GetAsso() association: Association,
+  ): Promise<Project> {
+    console.log('idddddd-Param-Controllers-------------!!!!!!!!!!', id);
+    console.log(
+      'UpdateProjetDto-Controllers------------!!!!!!!!!!',
+      updateProjectDto,
+    );
+    console.log('@GetAsso-Controllers-------------!!!!!!!!!!', association);
+    return this.projectService.updateProject(id, updateProjectDto, association);
+  }
 
-  //   @Delete(':id')
-  //   remove(@Param('id') id: string) {
-  //     return this.projectService.remove(id);
-  //   }
+  //Uniquement l'association avec son ID peut supprimer son projet
+  @Delete(':id')
+  async delete(@Param('id') id: string, @GetAsso() association: Association) {
+    console.log('id-Param-Controllers-------------!!!!!!!!!!', id);
+    console.log('@GetAsso-Controllers-------------!!!!!!!!!!', association);
+    return this.projectService.deleteProject(id, association);
+  }
 }

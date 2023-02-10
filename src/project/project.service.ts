@@ -3,8 +3,8 @@ import {
   ForbiddenException,
   Injectable,
   InternalServerErrorException,
-  MethodNotAllowedException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm/dist/common';
 import { Association } from 'src/association/entities/association.entity';
@@ -18,24 +18,23 @@ export class ProjectService {
   constructor(
     @InjectRepository(Project)
     private projectRepository: Repository<Project>,
-    @InjectRepository(Association)
-    private assoRepository: Repository<Association>,
   ) {}
   //-------------------Association créer un projet----------------------
+
   async createProject(
-    // idValue: string,
+    idValue: string,
     createProjectDto: CreateProjectDto,
-    association_: Association,
+    association: Association,
   ): Promise<Project> {
-    //Je m'assure que seule cette association puisse créer son projet
-    // if (association_.id !== idValue) {
-    //   throw new ForbiddenException(
-    //     "Vous n'êtes pas autorisé à créer ce project.",
-    //   );
-    // }
+    // Vérifie si l'ID de l'association passé dans la requête correspond à l'ID de l'association associée
+    if (association.id !== idValue) {
+      throw new ForbiddenException(
+        "Vous n'êtes pas autorisé à créer ce projet.",
+      );
+    }
     const newProject = await this.projectRepository.create({
       ...createProjectDto,
-      association_,
+      association_: { id: idValue },
     });
     try {
       const createdProject = await this.projectRepository.save(newProject);
@@ -43,84 +42,95 @@ export class ProjectService {
     } catch (error) {
       // gestion des erreurs
       if (error.code === '23505') {
-        throw new ConflictException('Le projet existe déja !');
+        throw new ConflictException('Le projet existe déjà !');
       } else {
         throw new InternalServerErrorException();
       }
     }
   }
-  // async findAll(): Promise<Project[]> {
-  //   return await this.projectRepository.find();
-  // }
+  //Uniquement les utilisateurs connectés peuvent trouvés tous les projets.
+  async findAllProject(): Promise<Project[]> {
+    return await this.projectRepository.find();
+  }
 
-  // async findOne(idValue: string): Promise<Project> {
-  //   const projectFound = await this.projectRepository.findOneBy({
-  //     id: idValue,
-  //   });
-  //   if (!projectFound) {
-  //     throw new NotFoundException(
-  //       `Project non trouvé avec le titre:${idValue}`,
-  //     );
-  //   }
-  //   return projectFound;
-  // }
+  async findOneProject(idValue: string): Promise<Project> {
+    const projectFound = await this.projectRepository.findOneBy({
+      id: idValue,
+    });
+    if (!projectFound) {
+      throw new NotFoundException(
+        `Project non trouvé avec le titre:${idValue}`,
+      );
+    }
+    return projectFound;
+  }
 
-  // async update(
-  //   idValue: string,
-  //   updateProjectDto: UpdateProjectDto,
-  //   // association: Association,
-  // ): Promise<Project | string> {
-  //   console.log(idValue);
-  //   // console.log('Association---------------!!!', association);
-  //   const projectToUpdate = await this.findOne(idValue, association);
-  //   if (updateProjectDto.id !== association.id) {
-  //     throw new MethodNotAllowedException(
-  //       "Vous n'êtes pas autorisé à modifier ces informations",
-  //     );
-  //   }
-  //   console.log('id requête utilisateur---------------!!!', idValue);
-  //   // console.log('id association-----------------------!!!', association.id);
-  //   const project = await this.projectRepository.findOneBy({
-  //     id: updateProjectDto.id,
-  //   });
-  //   console.log('TO UPDATE ', projectToUpdate);
+  async updateProject(
+    idValue: string,
+    updateProjectDto: UpdateProjectDto,
+    association: Association,
+  ): Promise<Project> {
+    console.log(idValue);
+    console.log(
+      'updateProjectDto-du-Service-------------!!!',
+      updateProjectDto,
+    );
+    console.log('Association---------------!!!', association);
+    console.log('IF-!!!association ||', association);
+    console.log('IF-association.id !== idValue', association.id);
+    const projectToUpdate = await this.projectRepository.findOne({
+      where: { id: idValue },
+    });
+    //Je m'assure que seule cette association puisse modifier son profil
+    if (!association || association.id !== projectToUpdate.association_.id) {
+      throw new UnauthorizedException(
+        "Vous n'êtes pas autorisé à modifier ces informations",
+      );
+    }
+    if (!projectToUpdate) {
+      throw new NotFoundException("Le projet n'existe pas");
+    }
+    console.log('id requête project---!!!', idValue);
+    console.log('projectToUpdate-Service---!!!', projectToUpdate);
+    console.log('!!!projectToUpdate---!!!', !projectToUpdate);
 
-  //   if (project.id !== updateProjectDto.id) {
-  //     throw new MethodNotAllowedException(
-  //       `Projet non trouvée avec l'id:${idValue}`,
-  //     );
-  //   }
-  //   try {
-  //     if (updateProjectDto.topic !== null) {
-  //       projectToUpdate.topic = updateProjectDto.topic;
-  //     }
-  //     if (updateProjectDto.body !== null) {
-  //       projectToUpdate.body = updateProjectDto.body;
-  //     }
-  //     if (updateProjectDto.url !== null) {
-  //       projectToUpdate.url = updateProjectDto.url;
-  //     }
-  //     if (updateProjectDto.picture !== null) {
-  //       projectToUpdate.picture = updateProjectDto.picture;
-  //     }
-  //     if (updateProjectDto.favoris !== null) {
-  //       projectToUpdate.favoris = updateProjectDto.favoris;
-  //     }
-  //     return await this.projectRepository.save(projectToUpdate);
-  //   } catch {
-  //     throw new Error('autre erreur tâche');
-  //   }
-  // }
+    const { topic, body, website, picture, favoris } = updateProjectDto;
+    if (updateProjectDto.topic) {
+      projectToUpdate.topic = topic;
+    }
+    if (updateProjectDto.body) {
+      projectToUpdate.body = body;
+    }
+    if (updateProjectDto.website) {
+      projectToUpdate.website = website;
+    }
+    if (updateProjectDto.picture) {
+      projectToUpdate.picture = picture;
+    }
+    if (updateProjectDto.favoris) {
+      projectToUpdate.favoris = favoris;
+    }
+    console.log('return-projectRepository.save----!!!!', projectToUpdate);
+    return await this.projectRepository.save(projectToUpdate);
+  }
 
-  // async remove(idValue: string): Promise<Project | string> {
-  //   const result = await this.projectRepository.delete({
-  //     id: idValue,
-  //   });
-  //   if (result.affected === 0) {
-  //     throw new NotFoundException(
-  //       `Project non trouvé avec le titre:${idValue}`,
-  //     );
-  //   }
-  //   return `Cette action entraine la suppresion du projet:${idValue}`;
-  // }
+  async deleteProject(idValue: string, association: Association) {
+    console.log('id-Service-------------!!!!!!!!!!', idValue);
+    console.log('Association-Service-------------!!!!!!!!!!', association);
+    //Je m'assure que seule cette association puisse supprimer son projet
+    const projectToDelete = await this.projectRepository.findOne({
+      where: { id: idValue },
+    });
+    console.log('projectToDelete-Service--------------!!!', projectToDelete);
+    if (!association || association.id !== projectToDelete.association_.id) {
+      throw new UnauthorizedException(
+        "Vous n'êtes pas autorisé à supprimer ce projet",
+      );
+    }
+    if (!projectToDelete) {
+      throw new NotFoundException("Le projet n'existe pas");
+    }
+    await this.projectRepository.delete(idValue);
+    return `Cette action a supprmé l'association #${idValue}`;
+  }
 }

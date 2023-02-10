@@ -1,4 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Donor } from 'src/donor/entities/donor.entity';
 import { Project } from 'src/project/entities/project.entity';
@@ -15,15 +21,31 @@ export class DonationService {
     @InjectRepository(Project)
     private projectRepository: Repository<Project>,
   ) {}
-  async create(
+  async createDon(
+    idValue: string,
     createDonationDto: CreateDonationDto,
     donor: Donor,
   ): Promise<Donation> {
+    if (donor.id !== idValue) {
+      throw new ForbiddenException(
+        "Vous n'êtes pas autorisé à créer ce projet.",
+      );
+    }
     const newDonation = await this.donationRepository.create({
       ...createDonationDto,
-      donor_: donor,
+      donor_: { id: idValue },
     });
-    return await this.donationRepository.save(newDonation);
+    try {
+      const createdProject = await this.projectRepository.save(newDonation);
+      return createdProject;
+    } catch (error) {
+      // gestion des erreurs
+      if (error.code === '23505') {
+        throw new ConflictException('Le projet existe déjà !');
+      } else {
+        throw new InternalServerErrorException();
+      }
+    }
   }
 
   async findAll(donor: Donor): Promise<Donation[]> {

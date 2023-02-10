@@ -16,12 +16,12 @@ export class AuthController {
   //-----------------------------------------Donateur---------------------------------
   // Ici le donateur créer son profil et ce log
   @Post('register/donor')
-  createDonor(@Body() createDonorAuthDto: CreateDonorAuthDto) {
+  create(@Body() createDonorAuthDto: CreateDonorAuthDto) {
     return this.authService.createDonor(createDonorAuthDto);
   }
 
   @Post('login/donor')
-  async loginDonor(
+  async login(
     @Body() loginDonorDto: LoginDonorDto,
   ): Promise<{ accessToken: string }> {
     return this.authService.loginDonor(loginDonorDto);

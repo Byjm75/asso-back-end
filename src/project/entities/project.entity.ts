@@ -29,7 +29,7 @@ export class Project {
   @Column({
     nullable: true,
   })
-  url: string;
+  website: string;
 
   @Column({
     nullable: true,
@@ -45,7 +45,7 @@ export class Project {
   //Méthode du "ondelete" en Cascade permet de supprimer les tables associées.
   @ManyToOne(() => Association, (associations) => associations.projects, {
     onDelete: 'CASCADE',
-    nullable: false,
+    nullable: true,
     eager: true,
   })
   association_: Association;

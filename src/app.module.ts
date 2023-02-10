@@ -12,7 +12,7 @@ import { AuthModule } from './auth/auth.module';
 import { Donor } from './donor/entities/donor.entity';
 import { Association } from './association/entities/association.entity';
 import { Project } from './project/entities/project.entity';
-// import { DonationModule } from './donation/donation.module';
+import { DonationModule } from './donation/donation.module';
 import { Donation } from './donation/entities/donation.entity';
 import { DonorModule } from './donor/donor.module';
 
@@ -38,7 +38,7 @@ import { DonorModule } from './donor/donor.module';
     AssociationModule,
     ProjectModule,
     AuthModule,
-    // DonationModule,
+    DonationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
