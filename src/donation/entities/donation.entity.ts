@@ -31,12 +31,14 @@ export class Donation {
   @ManyToOne(() => Project, (projects) => projects.donations, {
     onDelete: 'CASCADE',
     nullable: false,
+    // eager: true,
   })
   project_: Project;
 
   @ManyToOne(() => Donor, (donors) => donors.donations, {
     onDelete: 'CASCADE',
     nullable: false,
+    eager: true,
   })
   donor_: Donor;
 }

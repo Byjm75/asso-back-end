@@ -1,68 +1,63 @@
 import {
-  ConflictException,
-  ForbiddenException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Donation } from './entities/donation.entity';
 import { Donor } from 'src/donor/entities/donor.entity';
 import { Project } from 'src/project/entities/project.entity';
-import { Repository } from 'typeorm';
 import { CreateDonationDto } from './dto/create-donation.dto';
 import { UpdateDonationDto } from './dto/update-donation.dto';
-import { Donation } from './entities/donation.entity';
 
 @Injectable()
 export class DonationService {
+  projectService: any;
   constructor(
     @InjectRepository(Donation)
     private donationRepository: Repository<Donation>,
     @InjectRepository(Project)
-    private projectRepository: Repository<Project>,
+    private readonly projectRepository: Repository<Project>,
+    @InjectRepository(Donor)
+    private readonly donorRepository: Repository<Donor>,
   ) {}
   async createDon(
-    idValue: string,
+    id: string,
     createDonationDto: CreateDonationDto,
     donor: Donor,
   ): Promise<Donation> {
-    if (donor.id !== idValue) {
-      throw new ForbiddenException(
-        "Vous n'êtes pas autorisé à créer ce projet.",
-      );
+    // Verify if the project exists
+    const project = await this.projectRepository.findOneBy({ id: id });
+    console.log('const--project--Service---!!!', project);
+    if (!project) {
+      throw new NotFoundException("Ce projet n'existe pas.");
     }
-    const newDonation = await this.donationRepository.create({
-      ...createDonationDto,
-      donor_: { id: idValue },
-    });
-    try {
-      const createdProject = await this.projectRepository.save(newDonation);
-      return createdProject;
-    } catch (error) {
-      // gestion des erreurs
-      if (error.code === '23505') {
-        throw new ConflictException('Le projet existe déjà !');
-      } else {
-        throw new InternalServerErrorException();
-      }
-    }
+    // Create the donation
+    const { amount, by_month } = createDonationDto;
+    const donation = new Donation();
+    donation.amount = amount;
+    donation.by_month = by_month;
+    donation.project_ = project;
+    donation.donor_ = donor;
+
+    return await this.donationRepository.save(donation);
   }
 
-  async findAll(donor: Donor): Promise<Donation[]> {
+  async findAllDonation(idValue: string): Promise<Donation[]> {
     const donationFound = await this.donationRepository.findBy({
-      donor_: donor,
+      id: idValue,
     });
-    console.log('donationFound', donationFound);
+    console.log('donationFound--Service---!!!', donationFound);
     if (!donationFound) {
-      throw new NotFoundException(`Catérorie non trouvée`);
+      throw new NotFoundException(`Donations non trouvée`);
     }
     return donationFound;
   }
 
-  async findOne(idValue: string, donor: Donor): Promise<Donation> {
+  async findOneDonation(idValue: string): Promise<Donation> {
     const donationFound = await this.donationRepository.findOneBy({
       id: idValue,
-      donor_: donor,
     });
     if (!donationFound) {
       throw new NotFoundException(`Donation non trouvé avec l'id:${idValue}`);
@@ -70,33 +65,40 @@ export class DonationService {
     return donationFound;
   }
 
-  async update(
+  async updateDonation(
     idValue: string,
     updateDonationDto: UpdateDonationDto,
     donor: Donor,
-  ): Promise<Donation | string> {
-    console.log(idValue);
-    console.log('donor---------------!!!', donor);
-    const query = this.donationRepository.createQueryBuilder();
-    query.where({ id: idValue }).andWhere({ donor_: donor });
-    const updateDonation = await query.getOne();
-    console.log('TO UPDATE ', updateDonation);
+  ): Promise<Donation> {
+    console.log('1-idValue-Service---!!!', idValue);
+    console.log('2-updateDonationDto---Service--------!!!', updateDonationDto);
+    console.log('3-donor-----Service-------------!!!', donor);
+    console.log('4-IF-!donor ||', donor);
+    console.log('5-IF-donor.id !== donor.id', donor.id);
 
-    if (!updateDonation) {
-      throw new NotFoundException(`Donation non trouvée avec l'id:${idValue}`);
+    const donationToUpdate = await this.donationRepository.findOne({
+      where: { id: idValue },
+    });
+    //Je m'assure que seul ce donateur puisse modifier sa donation
+    if (!donor || donor.id !== donationToUpdate.donor_.id) {
+      throw new UnauthorizedException(
+        "Vous n'êtes pas autorisé à modifier ces informations",
+      );
     }
-
-    try {
-      if (updateDonationDto.amount !== null) {
-        updateDonation.amount = updateDonationDto.amount;
-      }
-      if (updateDonationDto.by_month !== null) {
-        updateDonation.by_month = updateDonationDto.by_month;
-      }
-      return await this.donationRepository.save(updateDonation);
-    } catch {
-      throw new Error('autre erreur tâche');
+    if (!donationToUpdate) {
+      throw new NotFoundException(`Donation non trouvée`);
     }
+    console.log('donationToUpdate-Service---!!!', !donationToUpdate);
+    // Update the donation
+    const { amount, by_month } = updateDonationDto;
+    if (updateDonationDto.amount) {
+      donationToUpdate.amount = amount;
+    }
+    if (updateDonationDto.by_month) {
+      donationToUpdate.by_month = by_month;
+    }
+    console.log('return-donationRepository.save----!!!!', donationToUpdate);
+    return await this.donationRepository.save(donationToUpdate);
   }
 
   async remove(idValue: string, donor: Donor): Promise<Donation | string> {

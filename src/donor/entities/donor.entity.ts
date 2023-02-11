@@ -66,8 +66,8 @@ export class Donor {
   association: Association[];
 
   @OneToMany(() => Donation, (donations) => donations.donor_, {
+    nullable: false,
     onDelete: 'CASCADE',
-    eager: true,
   })
   donations: Donation[];
 }
