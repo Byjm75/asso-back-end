@@ -59,12 +59,9 @@ export class DonationController {
     console.log('@GetDonor-Controllers-------------!!!!!!!!!!', donor);
     return this.donationService.updateDonation(id, updateDonationDto, donor);
   }
+
+  @Delete(':id')
+  async delete(@Param('id') id: string, @GetDonor() donor: Donor) {
+    return this.donationService.deleteDonation(id, donor);
+  }
 }
-//   @Delete(':id')
-//   remove(
-//     @Param('id') id: string,
-//     @Body()
-//     donor: Donor,
-//   ) {
-//     return this.donationService.remove(id, donor);
-//   }

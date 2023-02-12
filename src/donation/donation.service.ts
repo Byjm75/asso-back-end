@@ -73,8 +73,6 @@ export class DonationService {
     console.log('1-idValue-Service---!!!', idValue);
     console.log('2-updateDonationDto---Service--------!!!', updateDonationDto);
     console.log('3-donor-----Service-------------!!!', donor);
-    console.log('4-IF-!donor ||', donor);
-    console.log('5-IF-donor.id !== donor.id', donor.id);
 
     const donationToUpdate = await this.donationRepository.findOne({
       where: { id: idValue },
@@ -85,6 +83,9 @@ export class DonationService {
         "Vous n'êtes pas autorisé à modifier ces informations",
       );
     }
+    console.log('4-IF-!donor ||', donor);
+    console.log('5-IF-donor.id !== donor.id', donor.id);
+
     if (!donationToUpdate) {
       throw new NotFoundException(`Donation non trouvée`);
     }
@@ -101,16 +102,22 @@ export class DonationService {
     return await this.donationRepository.save(donationToUpdate);
   }
 
-  async remove(idValue: string, donor: Donor): Promise<Donation | string> {
-    const result = await this.donationRepository.delete({
-      donor_: donor,
-      id: idValue,
+  async deleteDonation(
+    idValue: string,
+    donor: Donor,
+  ): Promise<Donation | string> {
+    const dononationToDelete = await this.donationRepository.findOne({
+      where: { id: idValue },
     });
-    if (result.affected === 0) {
-      throw new NotFoundException(
-        `Donation non trouvé avec le titre:${idValue}`,
+    if (!donor || donor.id !== dononationToDelete.donor_.id) {
+      throw new UnauthorizedException(
+        "Vous n'êtes pas autorisé à supprimer cette donation",
       );
     }
-    return `Cette action entraine la suppresion de la donation:${idValue}`;
+    if (!dononationToDelete) {
+      throw new NotFoundException("Cette donation n'existe pas");
+    }
+    await this.donationRepository.delete(idValue);
+    return `Cette action a supprmé la donation #${idValue}`;
   }
 }

@@ -6,14 +6,14 @@ import {
   IsString,
   IsUrl,
   Matches,
-  MaxLength,
   MinLength,
 } from 'class-validator';
 import { CreateAssoAuthDto } from 'src/auth/dto/create-asso.dto';
 import { RoleEnumType } from 'src/auth/roles.decorator';
 
+// Typage de Association pour la modification de compte avec les décorateurs de Class-Validator (Assure la gestion d'erreur)
 export class UpdateAssociationDto extends PartialType(CreateAssoAuthDto) {
-  //------------------------------------------------------nom---------
+  //------------------------------------------------------nom
   @IsOptional()
   @IsNotEmpty({
     message: ' *Le nom ne peux pas être vide',
@@ -25,10 +25,11 @@ export class UpdateAssociationDto extends PartialType(CreateAssoAuthDto) {
     message: ' *Le nom doit contenir au moins un caractère ',
   })
   name: string;
-  //------------------------------------------------------email---------
+
+  //-----------------------------------------------------email
   @IsOptional()
   @IsNotEmpty({
-    message: "*L'email nom ne peux pas être vide",
+    message: "*L'email ne peux pas être vide",
   })
   @IsEmail(
     {},
@@ -38,8 +39,8 @@ export class UpdateAssociationDto extends PartialType(CreateAssoAuthDto) {
   )
   @IsString()
   email: string;
-  //------------------------------------------------------mot de passe---------
-  @IsOptional()
+
+  //------------------------------------------------mot de passe
   @IsNotEmpty({
     message: ' *Le mot de passe ne peux pas être vide',
   })
@@ -49,13 +50,14 @@ export class UpdateAssociationDto extends PartialType(CreateAssoAuthDto) {
   @MinLength(8, {
     message: '*Le mot de passe doit contenir au moins 8 caractères',
   })
-  @Matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/, {
+  @Matches(/^\S*(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/, {
     message:
-      '*Le mot de passe doit contenir une majuscule, une minuscule et un nombre',
+      '*Le mot de passe doit contenir une Majuscule, une minuscule et un nombre',
   })
   password: string;
   hashedPassword: string;
-  //------------------------------------------------------thème---------
+
+  //---------------------------------------------------thème
   @IsOptional()
   @IsNotEmpty({
     message: ' *Le thème doit être renseigné',
@@ -64,11 +66,13 @@ export class UpdateAssociationDto extends PartialType(CreateAssoAuthDto) {
     message: ' *Le thème doit être une chaine de caractère',
   })
   theme: string;
-  //---------------------------------------------------------------------
+
+  //---------------------------------------------------website
   @IsOptional()
   @IsUrl()
   website: string;
-  //------------------------------------------------------body---------
+
+  //----------------------------------------------------body
   @IsOptional()
   @IsString({
     message: ' *Le champ de texte doit être une chaine de caractère',
@@ -77,9 +81,12 @@ export class UpdateAssociationDto extends PartialType(CreateAssoAuthDto) {
     message: '*Le champ de texte doit contenir au moins 10 caractère',
   })
   body: string;
-  //---------------------------------------------------------------------
+
+  //--------------------------------------------------photo
   @IsOptional()
   @IsString()
   picture: string;
+
+  //--------------------------------------------------role
   role: RoleEnumType.ASSOCIATION;
 }

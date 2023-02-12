@@ -4,28 +4,31 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Association {
-  //Je génére la clé primaire
+  // Colone de l'Id crée et transformé en string
   @PrimaryGeneratedColumn('uuid')
   id?: string;
 
-  //Je crée les colonnes
+  // Colonne nom obligatoire et nom unique
   @Column({
     nullable: false,
     unique: true,
   })
-  name: string; //Je nomme le nom de la colonne et la type
+  //Je nomme la colonne et son type
+  name: string;
 
+  // Colonne email obligatoire
   @Column({
     nullable: false,
-    unique: true,
   })
   email: string;
 
+  // Colonne mot de passe obligatoire
   @Column({
     nullable: false,
   })
   password: string;
 
+  // Colonne siret obligatoire
   @Column({
     nullable: false,
     type: 'char',
@@ -33,6 +36,7 @@ export class Association {
   })
   siret: string;
 
+  // Colonne rna obligatoire
   @Column({
     nullable: false,
     type: 'char',
@@ -40,6 +44,7 @@ export class Association {
   })
   rna: string;
 
+  // Colonne thème obligatoire
   @Column({
     nullable: false,
     type: 'char',
@@ -47,26 +52,31 @@ export class Association {
   })
   theme: string;
 
+  // Colonne site web non obligatoire
   @Column({
     nullable: true,
   })
   website: string;
 
+  // Colonne champ de texte non obligatoire
   @Column({
     nullable: true,
   })
   body: string;
 
+  // Colonne photo non obligatoire
   @Column({
     nullable: true,
   })
   picture: string;
 
+  // Colonne favoris non obligatoire
   @Column({
     nullable: true,
   })
   favoris: string;
 
+  // Colonne role généré automatiquement
   @Column({
     type: 'enum',
     enum: RoleEnumType,

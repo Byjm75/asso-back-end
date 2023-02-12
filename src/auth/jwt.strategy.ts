@@ -26,11 +26,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       const donor = await this.donorRepository.findOneBy({
         id: idDonorPayload,
       });
-      console.log('donor------!!!!!!!!! : ', donor);
+      console.log('PAYLOAD-DONOR---!!! : ', donor);
 
       if (!donor) {
         throw new UnauthorizedException(
-          `Le Donateur avec l'id "${donor}" n'a pas été trouvée.`,
+          `Le donateur avec l'id "${donor}" n'a pas été trouvé.`,
         );
       }
       return donor;
@@ -40,7 +40,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       const association = await this.associationRepository.findOneBy({
         id: idAssociationPayload,
       });
-      console.log('association------!!!!!!!!! : ', association);
+      console.log('PAYLOAD-ASSOCIATION---!!! : ', association);
 
       if (!association) {
         throw new UnauthorizedException(

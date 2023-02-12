@@ -2,7 +2,6 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -16,16 +15,20 @@ export class AssociationService {
     @InjectRepository(Association)
     private readonly associationRepository: Repository<Association>,
   ) {}
-  //En fonction
+
+  //Affiche toutes les associations de la BDD, tous roles.
   async findAllAsso(): Promise<Association[]> {
     return await this.associationRepository.find();
   }
-  //En fonction
+
+  //Trouve une association via son id, tous roles
   async findOneAsso(idValue: string): Promise<Association> {
-    const association = await this.associationRepository.findOneBy({
-      id: idValue,
+    console.log('1 Service idValue---!!!', idValue);
+
+    const association = await this.associationRepository.findOne({
+      where: { id: idValue },
     });
-    console.log('idValue-Service-------------!!!!!!!!', association);
+    console.log('1 Service where: { id: idValue }---!!!', association);
     if (!association) {
       throw new NotFoundException(
         `Aucune association trouvée avec l'id ${idValue}`,
@@ -33,12 +36,17 @@ export class AssociationService {
     }
     return association;
   }
-  //En fonction
+
+  //Uniquement l'association avec son ID peut modifier son profil
   async updateAsso(
     idValue: string,
     upDateAssoDto: UpdateAssociationDto,
     association: Association,
   ): Promise<Association> {
+    console.log('1 Service idValue---!!!', idValue);
+    console.log('2 Service updateDonationDto---!!!', upDateAssoDto);
+    console.log('3 Service association---!!!', association);
+
     //Je m'assure que seule cette association puisse modifier son profil
     if (association.id !== idValue) {
       throw new ForbiddenException(
@@ -48,17 +56,12 @@ export class AssociationService {
     const upDateAssociation = await this.associationRepository.findOne({
       where: { id: idValue },
     });
-    console.log(
-      'upDateAssociation-via-IdValue-Service-------------!!!!!!!!!!',
-      upDateAssociation,
-    );
-    console.log(
-      'asso: Utilisateur,-Service-------------!!!!!!!!!!',
-      association,
-    );
+    console.log('4 Service where: { id: idValue }---!!!', upDateAssociation);
+
     if (!upDateAssociation) {
       throw new NotFoundException("L'association n'existe pas");
     }
+    //Récupére les items du update-asso-Dto à modifier
     const { name, email, password, theme, website, body, picture } =
       upDateAssoDto;
     try {
@@ -85,6 +88,7 @@ export class AssociationService {
       if (upDateAssoDto.picture) {
         upDateAssociation.picture = picture;
       }
+      console.log('return associationRepository.sav----!!!', upDateAssociation);
       return await this.associationRepository.save(upDateAssociation);
     } catch (error) {
       throw new Error(error);

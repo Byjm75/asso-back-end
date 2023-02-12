@@ -9,10 +9,11 @@ import {
   IsUrl,
   Length,
 } from 'class-validator';
+import { RoleEnumType } from '../roles.decorator';
 
-// Ici la class et propriétés nécessaire à la création d'un compte
+// Typage de Association pour la modification de compte avec les décorateurs de Class-Validator (Assure la gestion d'erreur)
 export class CreateAssoAuthDto {
-  //------------------------------------------------------nom---------
+  //------------------------------------------------------nom
   @IsNotEmpty({
     message: ' *Le nom ne peux pas être vide',
   })
@@ -23,7 +24,8 @@ export class CreateAssoAuthDto {
     message: ' *Le nom doit contenir au moins un caractère ',
   })
   name: string;
-  //------------------------------------------------------email---------
+
+  //-----------------------------------------------------email
   @IsNotEmpty({
     message: "*L'email ne peux pas être vide",
   })
@@ -35,7 +37,8 @@ export class CreateAssoAuthDto {
   )
   @IsString()
   email: string;
-  //------------------------------------------------------mot de passe---------
+
+  //--------------------------------------------------mot de passe
   @IsNotEmpty({
     message: ' *Le mot de passe ne peux pas être vide',
   })
@@ -45,12 +48,13 @@ export class CreateAssoAuthDto {
   @MinLength(8, {
     message: '*Le mot de passe doit contenir au moins 8 caractères',
   })
-  @Matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/, {
+  @Matches(/^\S*(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/, {
     message:
-      '*Le mot de passe doit contenir une Majuscule, une minuscule et un nombre',
+      "*Le mot de passe doit contenir une Majuscule, une minuscule, un nombre et pas d'espace",
   })
   password: string;
-  //------------------------------------------------------Siret---------
+
+  //------------------------------------------------------Siret
   @IsNotEmpty({
     message: ' *Le Siret ne peux pas être vide',
   })
@@ -65,7 +69,8 @@ export class CreateAssoAuthDto {
       '*Le Siret doit commencer par une majuscule et contenir 13 chiffres',
   })
   siret: string;
-  //------------------------------------------------------Rna---------
+
+  //------------------------------------------------------Rna
   @IsNotEmpty({
     message: ' *Le Rna ne peux pas être vide',
   })
@@ -79,7 +84,8 @@ export class CreateAssoAuthDto {
     message: '*Le Rna doit contenir exactement une Majuscule et 9 chiffres',
   })
   rna: string;
-  //------------------------------------------------------thème---------
+
+  //---------------------------------------------------thème
   @IsNotEmpty({
     message: ' *Le thème doit être renseigné',
   })
@@ -90,11 +96,13 @@ export class CreateAssoAuthDto {
     message: '*Le thème doit contenir au max 50 caractères',
   })
   theme: string;
-  //-------------------------------------------------------------------
+
+  //---------------------------------------------------website
   @IsOptional()
   @IsUrl()
   website: string;
-  //---------------------------------------------------body------------
+
+  //----------------------------------------------------body
   @IsOptional()
   @IsString({
     message: ' *Le champ de texte doit être une chaine de caractère',
@@ -103,8 +111,12 @@ export class CreateAssoAuthDto {
     message: '*Le champ de texte doit contenir au moins 10 caractère',
   })
   body: string;
-  //---------------------------------------------------------------------
+
+  //--------------------------------------------------photo
   @IsOptional()
   @IsString()
   picture: string;
+
+  //--------------------------------------------------role
+  role: RoleEnumType.ASSOCIATION;
 }

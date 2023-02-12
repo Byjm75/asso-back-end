@@ -117,7 +117,6 @@ export class ProjectService {
   async deleteProject(idValue: string, association: Association) {
     console.log('id-Service-------------!!!!!!!!!!', idValue);
     console.log('Association-Service-------------!!!!!!!!!!', association);
-    //Je m'assure que seule cette association puisse supprimer son projet
     const projectToDelete = await this.projectRepository.findOne({
       where: { id: idValue },
     });
