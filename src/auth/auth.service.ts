@@ -24,15 +24,12 @@ export class AuthService {
     @InjectRepository(Association)
     private assoRepository: Repository<Association>,
   ) {}
-  //-----------------------------------------Donateur---------------------------------
+  //-----------------------------------------------------------------Donateur-----------------------
   // Création d'un compte donateur
   async createDonor(createDonorAuthDto: CreateDonorAuthDto) {
     const { pseudo, surname, firstname, email, password, picture } =
       createDonorAuthDto;
-    console.log(
-      "Ceci est l'objet donor---------------------------!!!!!",
-      createDonorAuthDto,
-    );
+    console.log('1 Service createDonorAuthDto---!!!', createDonorAuthDto);
     // hashage du mot de passe
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -51,24 +48,23 @@ export class AuthService {
     } catch (error) {
       // gestion des erreurs
       if (error.code === '23505') {
-        throw new ConflictException('Ce donor existe déja');
+        throw new ConflictException('Se donateur existe déja');
       } else {
         throw new InternalServerErrorException();
       }
     }
   }
-  // // Connexion d'un compte donateur
+  // Connexion d'un compte donateur
   async loginDonor(loginDonorDto: LoginDonorDto) {
     const { email, password } = loginDonorDto;
     const donor = await this.donorRepository.findOneBy({
       email,
     });
-    console.log('je veux ton mail-----------!!!', email);
-    console.log('je veux ton mdp------------!!!', password);
+    console.log('1 Service email---!!!', email);
+    console.log('2 Service password---!!!', password);
     //Ici comparasaison du MP Hashé
     if (donor && (await bcrypt.compare(password, donor.password))) {
       const payload = { donor };
-      console.log('donor profil---------------!!!: ', payload);
       //Ici envoie du Token d'accés si authorisé
       const accessToken = await this.jwtService.sign(payload);
       return { accessToken };
@@ -78,14 +74,11 @@ export class AuthService {
       );
     }
   }
-  //-----------------------------------------Association---------------------------------
+  //-----------------------------------------------------------------Association---------------------
   //Création d'un compte association
   async createAsso(createAssoAuthDto: CreateAssoAuthDto) {
     const { name, email, password, siret, rna, theme } = createAssoAuthDto;
-    console.log(
-      "Ceci est l'objet association---------------------------!!!!!",
-      createAssoAuthDto,
-    );
+    console.log('1 Service createAssoAuthDto---!!!', createAssoAuthDto);
     // hashage du mot de passe
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -104,7 +97,7 @@ export class AuthService {
     } catch (error) {
       // gestion des erreurs
       if (error.code === '23505') {
-        throw new ConflictException('Le nom du donateur existe déja');
+        throw new ConflictException("Le nom de l'association existe déja");
       } else {
         throw new InternalServerErrorException();
       }
@@ -116,13 +109,11 @@ export class AuthService {
     const asso = await this.assoRepository.findOneBy({
       email,
     });
-    console.log('asso--------------!!!!!', asso);
-    console.log('je veux ton mail-----------!!!', email);
-    console.log('je veux ton mdp------------!!!', password);
+    console.log('1 Service email---!!!', email);
+    console.log('2 Service password---!!!', password);
     //Ici comparasaison du MP Hashé
     if (asso && (await bcrypt.compare(password, asso.password))) {
       const payload = { asso };
-      console.log('asso profil---------------!!!: ', payload);
       //Ici envoie du Token d'accés si autorisé
       const accessToken = await this.jwtService.sign(payload);
       return { accessToken };

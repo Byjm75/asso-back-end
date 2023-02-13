@@ -4,7 +4,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Association {
-  // Colone de l'Id crée et transformé en string
+  // Colonne de l'Id crée et transformé en string
   @PrimaryGeneratedColumn('uuid')
   id?: string;
 
@@ -85,7 +85,7 @@ export class Association {
   role: RoleEnumType;
 
   //Je relis les tables suivant leurs cardinalités et par les clés étrangéres.
-  //Méthode du "ondelete en Cascade permet de supprimer les tables associées"
+  //Relation avec la table projet
   @OneToMany(() => Project, (projects) => projects.association_, {
     nullable: false,
     onDelete: 'CASCADE',

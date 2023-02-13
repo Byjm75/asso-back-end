@@ -19,8 +19,6 @@ export class DonationService {
     private donationRepository: Repository<Donation>,
     @InjectRepository(Project)
     private readonly projectRepository: Repository<Project>,
-    @InjectRepository(Donor)
-    private readonly donorRepository: Repository<Donor>,
   ) {}
   async createDon(
     id: string,
@@ -44,35 +42,37 @@ export class DonationService {
     return await this.donationRepository.save(donation);
   }
 
-  async findAllDonation(idValue: string): Promise<Donation[]> {
-    const donationFound = await this.donationRepository.findBy({
-      id: idValue,
-    });
-    console.log('donationFound--Service---!!!', donationFound);
-    if (!donationFound) {
-      throw new NotFoundException(`Donations non trouvée`);
-    }
-    return donationFound;
-  }
+  // async findAllDonation(idValue: string, donor: Donor): Promise<Donation[]> {
+  //   const donationFound = await this.donationRepository.findBy({
+  //     id: idValue,
+  //   });
+  //   console.log('donationFound--Service---!!!', donationFound);
+  //   if (!donationFound) {
+  //     throw new NotFoundException(`Donations non trouvée`);
+  //   }
+  //   return donationFound;
+  // }
 
+  //Trouve une donation via son id
   async findOneDonation(idValue: string): Promise<Donation> {
-    const donationFound = await this.donationRepository.findOneBy({
-      id: idValue,
+    const donationFound = await this.donationRepository.findOne({
+      where: { id: idValue },
     });
     if (!donationFound) {
-      throw new NotFoundException(`Donation non trouvé avec l'id:${idValue}`);
+      throw new NotFoundException(`Donation non trouvé`);
     }
     return donationFound;
   }
 
+  //Uniquement un donateur avec son ID peut modifier sa donation
   async updateDonation(
     idValue: string,
     updateDonationDto: UpdateDonationDto,
     donor: Donor,
   ): Promise<Donation> {
-    console.log('1-idValue-Service---!!!', idValue);
-    console.log('2-updateDonationDto---Service--------!!!', updateDonationDto);
-    console.log('3-donor-----Service-------------!!!', donor);
+    console.log('1 Service idValue---!!!', idValue);
+    console.log('2 Service updateDonationDto---!!!', updateDonationDto);
+    console.log('3 Service donor---!!!', donor);
 
     const donationToUpdate = await this.donationRepository.findOne({
       where: { id: idValue },
@@ -90,7 +90,8 @@ export class DonationService {
       throw new NotFoundException(`Donation non trouvée`);
     }
     console.log('donationToUpdate-Service---!!!', !donationToUpdate);
-    // Update the donation
+
+    //Récupére les items du updateDonationDto à modifier
     const { amount, by_month } = updateDonationDto;
     if (updateDonationDto.amount) {
       donationToUpdate.amount = amount;
@@ -118,6 +119,6 @@ export class DonationService {
       throw new NotFoundException("Cette donation n'existe pas");
     }
     await this.donationRepository.delete(idValue);
-    return `Cette action a supprmé la donation #${idValue}`;
+    return `Cette action a supprmé la donation`;
   }
 }

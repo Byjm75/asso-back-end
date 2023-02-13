@@ -12,46 +12,52 @@ import {
 
 @Entity()
 export class Donor {
-  //Je génére la clé primaire
+  // Colonne de l'Id crée et transformé en string
   @PrimaryGeneratedColumn('uuid')
   id?: string;
 
-  //Je crée les colonnes
+  // Colonne pseudo obligatoire et pseudo unique
   @Column({
     nullable: false,
     unique: true,
   })
-  pseudo: string; //Je nomme le nom de la colonne et la type
+  //Je nomme le nom de la colonne et la type
+  pseudo: string;
 
+  // Colonne pseudo obligatoire et pseudo unique
   @Column({
     nullable: false,
     unique: true,
   })
   surname: string;
 
+  // Colonne pseudo obligatoire et pseudo unique
   @Column({
     nullable: false,
     unique: true,
   })
   firstname: string;
 
+  // Colonne pseudo obligatoire et pseudo unique
   @Column({
     nullable: false,
     unique: true,
   })
   email: string;
-  //TypeOrm est typé par default en varchar 255 si autre le préciser
 
+  // Colonne pseudo obligatoire et pseudo unique
   @Column({
     nullable: false,
   })
   password: string;
 
+  // Colonne pseudo obligatoire et pseudo unique
   @Column({
     nullable: true,
   })
   picture: string;
 
+  // Colonne role généré automatiquement
   @Column({
     type: 'enum',
     enum: RoleEnumType,
@@ -60,11 +66,12 @@ export class Donor {
   role: RoleEnumType;
 
   //Je relis les tables suivant leurs cardinalités et par les clés étrangéres.
-  //Méthode du "ondelete en Cascade permet de supprimer les tables associées"
+  //Relation avec la table Association
   @ManyToMany(() => Association, { eager: false })
   @JoinTable()
   association: Association[];
 
+  //Relation avec la table Donation
   @OneToMany(() => Donation, (donations) => donations.donor_, {
     nullable: false,
     onDelete: 'CASCADE',

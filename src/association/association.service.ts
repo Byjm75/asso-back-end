@@ -13,7 +13,7 @@ import * as bcrypt from 'bcrypt';
 export class AssociationService {
   constructor(
     @InjectRepository(Association)
-    private readonly associationRepository: Repository<Association>,
+    private associationRepository: Repository<Association>,
   ) {}
 
   //Affiche toutes les associations de la BDD, tous roles.
@@ -44,7 +44,7 @@ export class AssociationService {
     association: Association,
   ): Promise<Association> {
     console.log('1 Service idValue---!!!', idValue);
-    console.log('2 Service updateDonationDto---!!!', upDateAssoDto);
+    console.log('2 Service upDateAssoDto---!!!', upDateAssoDto);
     console.log('3 Service association---!!!', association);
 
     //Je m'assure que seule cette association puisse modifier son profil
@@ -94,7 +94,7 @@ export class AssociationService {
       throw new Error(error);
     }
   }
-  //En fonction
+
   async deleteAsso(
     idValue: string,
     association: Association,
@@ -105,18 +105,17 @@ export class AssociationService {
         "Vous n'êtes pas autorisé à supprimer ce compte.",
       );
     }
+    console.log(
+      '1 Service if (association.id !== idValue)---!!!',
+      association.id,
+    );
+    console.log('2 Service if (association.id !== idValue)---!!!', idValue);
     const assoRemove = await this.associationRepository.delete({
       id: idValue,
     });
-    console.log('IdValue-Service-------------!!!!!!!!!!', idValue);
-    console.log(
-      'asso: Utilisateur,-Service-------------!!!!!!!!!!',
-      association,
-    );
-
     if (assoRemove.affected === 0) {
       throw new NotFoundException("Cette association n'existe pas!");
     }
-    return `Cette action a supprmé l'association #${idValue}`;
+    return `Cette action a supprmé l'association.`;
   }
 }
