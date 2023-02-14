@@ -23,8 +23,6 @@ export class AssociationService {
 
   //Trouve une association via son id, tous roles
   async findOneAsso(idValue: string): Promise<Association> {
-    console.log('1 Service idValue---!!!', idValue);
-
     const association = await this.associationRepository.findOne({
       where: { id: idValue },
     });
@@ -43,7 +41,6 @@ export class AssociationService {
     upDateAssoDto: UpdateAssociationDto,
     association: Association,
   ): Promise<Association> {
-    console.log('1 Service idValue---!!!', idValue);
     console.log('2 Service upDateAssoDto---!!!', upDateAssoDto);
     console.log('3 Service association---!!!', association);
 
@@ -61,7 +58,7 @@ export class AssociationService {
     if (!upDateAssociation) {
       throw new NotFoundException("L'association n'existe pas");
     }
-    //Récupére les items du update-asso-Dto à modifier
+    //Items du update-asso-Dto à modifier
     const { name, email, password, theme, website, body, picture } =
       upDateAssoDto;
     try {
@@ -91,7 +88,7 @@ export class AssociationService {
       console.log('return associationRepository.sav----!!!', upDateAssociation);
       return await this.associationRepository.save(upDateAssociation);
     } catch (error) {
-      throw new Error(error);
+      throw new Error("Autre erreur, merci de contacter l'administrateur");
     }
   }
 

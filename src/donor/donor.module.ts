@@ -11,9 +11,10 @@ import { Donation } from 'src/donation/entities/donation.entity';
 @Module({
   imports: [
     AuthModule,
-    TypeOrmModule.forFeature([Donor, Project, Association, Donation]),
+    TypeOrmModule.forFeature([Donor, Association, Donation]),
   ],
   controllers: [DonorController],
   providers: [DonorService],
+  exports: [DonorService],
 })
 export class DonorModule {}

@@ -10,8 +10,9 @@ import {
 import { CreateDonorAuthDto } from 'src/auth/dto/create-donor.dto';
 import { RoleEnumType } from 'src/auth/roles.decorator';
 
+// Typage de donateur pour la modification de compte avec les décorateurs de Class-Validator (Assure la gestion d'erreur)
 export class UpdateDonorDto extends PartialType(CreateDonorAuthDto) {
-  //-----------------------------------------------------pseudo--------
+  //------------------------------------------------------pseudo
   @IsOptional()
   @IsNotEmpty({
     message: ' *Le pseudo ne peux pas être vide',
@@ -19,11 +20,9 @@ export class UpdateDonorDto extends PartialType(CreateDonorAuthDto) {
   @IsString({
     message: ' *Le pseudo doit être une chaine de caractère',
   })
-  @Matches(/^[A-Za-z]*$/, {
-    message: "*Le pseudo ne doit pas contenir d'espace",
-  })
   pseudo: string;
-  //------------------------------------------------------email---------
+
+  //-----------------------------------------------------email
   @IsOptional()
   @IsNotEmpty({
     message: "*L'email ne peux pas être vide",
@@ -36,24 +35,30 @@ export class UpdateDonorDto extends PartialType(CreateDonorAuthDto) {
   )
   @IsString()
   email: string;
-  //------------------------------------------------------mot de passe---------
+
+  //------------------------------------------------mot de passe
   @IsOptional()
   @IsNotEmpty({
     message: ' *Le mot de passe ne peux pas être vide',
   })
-  @IsString()
+  @IsString({
+    message: ' *Le mot de passe doit être une chaine de caractère',
+  })
   @MinLength(8, {
     message: '*Le mot de passe doit contenir au moins 8 caractères',
   })
-  @Matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/, {
+  @Matches(/^\S*(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/, {
     message:
       '*Le mot de passe doit contenir une majuscule, une minuscule et un nombre',
   })
   password: string;
   hashedPassword: string;
-  //----------------------------------------------------------------------------
+
+  //--------------------------------------------------photo
   @IsOptional()
   @IsString()
   picture: string;
+
+  //--------------------------------------------------role
   role: RoleEnumType.DONOR;
 }

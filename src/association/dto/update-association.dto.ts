@@ -21,9 +21,6 @@ export class UpdateAssociationDto extends PartialType(CreateAssoAuthDto) {
   @IsString({
     message: ' *Le nom doit être une chaine de caractère',
   })
-  @MinLength(1, {
-    message: ' *Le nom doit contenir au moins un caractère ',
-  })
   name: string;
 
   //-----------------------------------------------------email
@@ -41,6 +38,7 @@ export class UpdateAssociationDto extends PartialType(CreateAssoAuthDto) {
   email: string;
 
   //------------------------------------------------mot de passe
+  @IsOptional()
   @IsNotEmpty({
     message: ' *Le mot de passe ne peux pas être vide',
   })

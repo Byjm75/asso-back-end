@@ -31,19 +31,20 @@ export class DonationController {
     @Body() createDonationDto: CreateDonationDto,
     @GetDonor() donor: Donor,
   ): Promise<Donation> {
-    console.log('1 Controller Body---!!!', createDonationDto);
-    console.log('2 Controller GetDonor---!!!', donor);
+    console.log('1 Controller Param id---!!!', id);
+    console.log('2 Controller Body createDonationDto---!!!', createDonationDto);
+    console.log('3 Controller GetDonor---!!!', donor);
     return this.donationService.createDon(id, createDonationDto, donor);
   }
-  // @Get()
-  // async find(@GetDonor() donor: Donor): Promise<Donation[]> {
-  //   console.log('1 Controller GetDonor---!!!');
-  //   return this.donationService.findAllDonation(donor);
-  // }
+  @Get()
+  async findAll() {
+    console.log('1 Controller GetDonor---!!!');
+    return this.donationService.findAllDonation();
+  }
 
   // localhost:8082/api/donation/id
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Donation> {
+  async findOne(@Param('id') id: string): Promise<Donation> {
     console.log('1 Controller Param id---!!!', id);
     return this.donationService.findOneDonation(id);
   }

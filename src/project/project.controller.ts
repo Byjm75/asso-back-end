@@ -16,28 +16,32 @@ import { Association } from 'src/association/entities/association.entity';
 import { Project } from './entities/project.entity';
 import { GetAsso } from 'src/auth/get-user.decorator';
 
+// localhost:8082/api/project
 @Controller('project')
 //Toutes les routes sont accessibles uniquement avec un Token
 @UseGuards(AuthGuard('jwt'))
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
-  //--------------Uniquement une association peut créer un projet-----------------------
+  //Un projet peut-être uniquement crée par une association
+  // localhost:8082/api/project/id
   @Post(':id')
   async create(
     @Param('id') id: string,
     @Body() createProjectDto: CreateProjectDto,
     @GetAsso() association: Association,
-  ) {
-    console.log('project------------!!!', createProjectDto);
+  ): Promise<Project> {
+    console.log('1 Controller Body---!!!', createProjectDto);
+    console.log('2 Controller GetDonor---!!!', association);
     return this.projectService.createProject(id, createProjectDto, association);
   }
   @Get()
-  findAll() {
+  async findAll() {
     return this.projectService.findAllProject();
   }
 
+  // localhost:8082/api/project/id
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<Project> {
     return this.projectService.findOneProject(id);
   }
 
@@ -48,20 +52,15 @@ export class ProjectController {
     @Body() updateProjectDto: UpdateProjectDto,
     @GetAsso() association: Association,
   ): Promise<Project> {
-    console.log('idddddd-Param-Controllers-------------!!!!!!!!!!', id);
-    console.log(
-      'UpdateProjetDto-Controllers------------!!!!!!!!!!',
-      updateProjectDto,
-    );
-    console.log('@GetAsso-Controllers-------------!!!!!!!!!!', association);
+    console.log('1 Controller Param id---!!!', id);
+    console.log('2 Controller Body updateProjectDto---!!!', updateProjectDto);
+    console.log('3 Controller GetDonor association---!!!', association);
     return this.projectService.updateProject(id, updateProjectDto, association);
   }
 
   //Uniquement l'association avec son ID peut supprimer son projet
   @Delete(':id')
   async delete(@Param('id') id: string, @GetAsso() association: Association) {
-    console.log('id-Param-Controllers-------------!!!!!!!!!!', id);
-    console.log('@GetAsso-Controllers-------------!!!!!!!!!!', association);
     return this.projectService.deleteProject(id, association);
   }
 }

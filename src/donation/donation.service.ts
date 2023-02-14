@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -13,7 +14,7 @@ import { UpdateDonationDto } from './dto/update-donation.dto';
 
 @Injectable()
 export class DonationService {
-  projectService: any;
+  // projectService: any;
   constructor(
     @InjectRepository(Donation)
     private donationRepository: Repository<Donation>,
@@ -21,17 +22,17 @@ export class DonationService {
     private readonly projectRepository: Repository<Project>,
   ) {}
   async createDon(
-    id: string,
+    idValue: string,
     createDonationDto: CreateDonationDto,
     donor: Donor,
   ): Promise<Donation> {
-    // Verify if the project exists
-    const project = await this.projectRepository.findOneBy({ id: id });
-    console.log('const--project--Service---!!!', project);
+    const project = await this.projectRepository.findOne({
+      where: { id: idValue },
+    });
     if (!project) {
       throw new NotFoundException("Ce projet n'existe pas.");
     }
-    // Create the donation
+    // Création de la donation avec les items de createDto
     const { amount, by_month } = createDonationDto;
     const donation = new Donation();
     donation.amount = amount;
@@ -42,16 +43,9 @@ export class DonationService {
     return await this.donationRepository.save(donation);
   }
 
-  // async findAllDonation(idValue: string, donor: Donor): Promise<Donation[]> {
-  //   const donationFound = await this.donationRepository.findBy({
-  //     id: idValue,
-  //   });
-  //   console.log('donationFound--Service---!!!', donationFound);
-  //   if (!donationFound) {
-  //     throw new NotFoundException(`Donations non trouvée`);
-  //   }
-  //   return donationFound;
-  // }
+  async findAllDonation(): Promise<Donation[]> {
+    return await this.donationRepository.find();
+  }
 
   //Trouve une donation via son id
   async findOneDonation(idValue: string): Promise<Donation> {

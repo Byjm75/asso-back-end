@@ -6,40 +6,35 @@ import {
   Matches,
   MinLength,
 } from 'class-validator';
-// import { RoleEnumType } from '../roles.decorator';
-// import { RoleEnumType } from 'src/donor/entities/donor.entity';
+import { RoleEnumType } from '../roles.decorator';
 
-// Ici la class et propriétés nécessaire à la création d'un compte
+// Typage du Donateur pour la création de compte avec les décorateurs de Class-Validator (Assure la gestion d'erreur)
 export class CreateDonorAuthDto {
-  //-----------------------------------------------------pseudo--------
+  //------------------------------------------------------pseudo
   @IsNotEmpty({
     message: ' *Le pseudo ne peux pas être vide',
   })
   @IsString({
     message: ' *Le pseudo doit être une chaine de caractère',
   })
-  @Matches(/^[A-Za-z]*$/, {
-    message: "*Le pseudo ne doit pas contenir d'espace",
-  })
   @MinLength(1, {
     message: ' *Le pseudo doit contenir au moins un caractère ',
   })
   pseudo: string;
-  //------------------------------------------------------prénom---------
+
+  //------------------------------------------------------surname
   @IsNotEmpty({
     message: ' *Le prénom ne peux pas être vide',
   })
   @IsString({
     message: ' *Le prénom doit être une chaine de caractère',
   })
-  @Matches(/^[A-Za-z]*$/, {
-    message: "*Le prénom ne doit pas contenir d'espace",
-  })
   @MinLength(1, {
     message: ' *Le prénom doit contenir au moins un caractère ',
   })
   surname: string;
-  //------------------------------------------------------nom---------
+
+  //------------------------------------------------------firstname
   @IsNotEmpty({
     message: ' *Le nom ne peux pas être vide',
   })
@@ -53,7 +48,8 @@ export class CreateDonorAuthDto {
     message: ' *Le nom doit contenir au moins un caractère ',
   })
   firstname: string;
-  //------------------------------------------------------email---------
+
+  //-----------------------------------------------------email
   @IsNotEmpty({
     message: "*L'email ne peux pas être vide",
   })
@@ -65,24 +61,28 @@ export class CreateDonorAuthDto {
   )
   @IsString()
   email: string;
-  //------------------------------------------------------mot de passe---------
+
+  //--------------------------------------------------mot de passe
   @IsNotEmpty({
     message: ' *Le mot de passe ne peux pas être vide',
   })
-  @IsString()
+  @IsString({
+    message: ' *Le mot de passe doit être une chaine de caractère',
+  })
   @MinLength(8, {
     message: '*Le mot de passe doit contenir au moins 8 caractères',
   })
-  @Matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/, {
+  @Matches(/^\S*(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/, {
     message:
-      '*Le mot de passe doit contenir une majuscule, une minuscule et un nombre',
+      "*Le mot de passe doit contenir une Majuscule, une minuscule, un nombre et pas d'espace",
   })
   password: string;
-  //----------------------------------------------------------------------------
+
+  //--------------------------------------------------photo
   @IsOptional()
   @IsString()
   picture: string;
-  // @IsString()
-  // role?: string;
-  // role: RoleEnumType;
+
+  //--------------------------------------------------role
+  role: RoleEnumType.DONOR;
 }

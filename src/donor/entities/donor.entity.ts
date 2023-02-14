@@ -38,20 +38,19 @@ export class Donor {
   })
   firstname: string;
 
-  // Colonne pseudo obligatoire et pseudo unique
+  // Colonne email obligatoire
   @Column({
     nullable: false,
-    unique: true,
   })
   email: string;
 
-  // Colonne pseudo obligatoire et pseudo unique
+  // Colonne mot de passe obligatoire
   @Column({
     nullable: false,
   })
   password: string;
 
-  // Colonne pseudo obligatoire et pseudo unique
+  // Colonne photo non obligatoire
   @Column({
     nullable: true,
   })
@@ -75,6 +74,7 @@ export class Donor {
   @OneToMany(() => Donation, (donations) => donations.donor_, {
     nullable: false,
     onDelete: 'CASCADE',
+    eager: false,
   })
   donations: Donation[];
 }

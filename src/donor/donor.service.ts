@@ -16,13 +16,12 @@ export class DonorService {
     private donorRepository: Repository<Donor>,
   ) {}
 
+  //Trouve un donateur via son id, tous roles
   async findOneDonor(idValue: string): Promise<Donor> {
-    const donorFound = await this.donorRepository.findOneBy({
-      id: idValue,
+    const donorFound = await this.donorRepository.findOne({
+      where: { id: idValue },
     });
-    console.log('donorFound----------------', donorFound);
-    console.log('id du donateur----------------', idValue);
-    console.log('Class-Donor----------------', Donor);
+    console.log('1 Service where: { id: idValue }---!!!', donorFound);
     if (!donorFound) {
       throw new NotFoundException(
         `pas de donateur trouvé avec l'id:${idValue}`,
@@ -31,7 +30,8 @@ export class DonorService {
     return donorFound;
   }
 
-  async update(
+  //Uniquement le donateur avec son ID peut modifier son profil
+  async updateDonor(
     idValue: string,
     upDateDonorDto: UpdateDonorDto,
     donor: Donor,
@@ -45,13 +45,13 @@ export class DonorService {
     const upDateDonor = await this.donorRepository.findOne({
       where: { id: idValue },
     });
-    console.log('id requête utilisateur---------------!!!', idValue);
     console.log('id requête utilisateur---------------!!!', donor);
     console.log('where: { id: idValue }---------------!!!', idValue);
 
     if (!upDateDonor) {
       throw new NotFoundException("Le donateur n'existe pas");
     }
+    //Items du update-donnor-Dto à modifier
     const { pseudo, email, password, picture } = upDateDonorDto;
     try {
       if (upDateDonorDto.password) {
@@ -68,11 +68,13 @@ export class DonorService {
       if (upDateDonorDto.picture) {
         upDateDonor.picture = picture;
       }
+      console.log('return donorRepository.sav----!!!', upDateDonor);
       return await this.donorRepository.save(upDateDonor);
     } catch {
       throw new Error("Autre erreur, merci de contacter l'administrateur");
     }
   }
+
   async deleteDonor(idValue: string, donor: Donor): Promise<Donor | string> {
     //Je m'assure que seul cet donateur puisse supprimer son profil
     if (donor.id !== idValue) {
@@ -83,16 +85,15 @@ export class DonorService {
     const donorRemove = await this.donorRepository.delete({
       id: idValue,
     });
-    console.log('donoooooorrrrr!!!!!', donor);
+    console.log('1 Service if (association.id !== idValue)---!!!', donor.id);
+    console.log('2 Service if (association.id !== idValue)---!!!', idValue);
     if (donorRemove.affected === 0) {
-      throw new NotFoundException(
-        `pas de donateur trouvée avec l'id:${idValue}`,
-      );
+      throw new NotFoundException(`Ce donateur n'existe pas!`);
     }
-    return `Cette action a supprmé le donateur #${idValue}`;
+    return `Cette action a supprmé le donateur`;
   }
-  //---------------------------------------------------ADMIN----------
-  // async findAllDonor(): Promise<Donor[]> {
-  //   return await this.DonorRepository.find();
-  // }
 }
+//---------------------------------------------------ADMIN----------
+// async findAllDonor(): Promise<Donor[]> {
+//   return await this.DonorRepository.find();
+// }

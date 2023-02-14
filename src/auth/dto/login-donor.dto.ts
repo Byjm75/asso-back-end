@@ -5,11 +5,11 @@ import {
   Matches,
   MinLength,
 } from 'class-validator';
-// import { RoleEnumType } from 'src/donor/entities/donor.entity';
+import { RoleEnumType } from '../roles.decorator';
 
 // Ici la class et propriétés nécessaire pour connexion au comptes des roles.
 export class LoginDonorDto {
-  //------------------------------------------------------email---------
+  //-----------------------------------------------------email
   @IsNotEmpty({
     message: " *L'email ne peux pas être vide",
   })
@@ -21,17 +21,23 @@ export class LoginDonorDto {
   )
   @IsString()
   email: string;
-  //------------------------------------------------------mot de passe---------
+
+  //--------------------------------------------------mot de passe
   @IsNotEmpty({
     message: ' *Le mot de passe ne peux pas être vide',
   })
-  @IsString()
+  @IsString({
+    message: ' *Le mot de passe doit être une chaine de caractère',
+  })
   @MinLength(8, {
     message: '*Le mot de passe doit contenir au moins 8 caractères',
   })
-  @Matches(/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/, {
+  @Matches(/^\S*(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])/, {
     message:
-      '*Le mot de passe doit contenir une majuscule, une minuscule et un nombre',
+      "*Le mot de passe doit contenir une Majuscule, une minuscule, un nombre et pas d'espace",
   })
   password: string;
+
+  //--------------------------------------------------role
+  role: RoleEnumType.DONOR;
 }

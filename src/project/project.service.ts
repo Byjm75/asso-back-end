@@ -18,36 +18,39 @@ export class ProjectService {
   constructor(
     @InjectRepository(Project)
     private projectRepository: Repository<Project>,
+    @InjectRepository(Association)
+    private readonly associationRepository: Repository<Association>,
   ) {}
   //-------------------Association créer un projet----------------------
-
   async createProject(
     idValue: string,
     createProjectDto: CreateProjectDto,
     association: Association,
   ): Promise<Project> {
-    // Vérifie si l'ID de l'association passé dans la requête correspond à l'ID de l'association associée
     if (association.id !== idValue) {
       throw new ForbiddenException(
         "Vous n'êtes pas autorisé à créer ce projet.",
       );
     }
-    const newProject = await this.projectRepository.create({
-      ...createProjectDto,
-      association_: { id: idValue },
+    const existingProject = await this.projectRepository.findOne({
+      where: [
+        { topic: createProjectDto.topic },
+        { body: createProjectDto.body },
+      ],
     });
-    try {
-      const createdProject = await this.projectRepository.save(newProject);
-      return createdProject;
-    } catch (error) {
-      // gestion des erreurs
-      if (error.code === '23505') {
-        throw new ConflictException('Le projet existe déjà !');
-      } else {
-        throw new InternalServerErrorException();
-      }
+    if (existingProject) {
+      throw new ConflictException('Le projet existe déjà !');
     }
+    // Création de la donation avec les items de createDto
+    const { topic, body } = createProjectDto;
+    const project = new Project();
+    project.topic = topic;
+    project.body = body;
+    project.association_ = association;
+
+    return await this.projectRepository.save(project);
   }
+
   //Uniquement les utilisateurs connectés peuvent trouvés tous les projets.
   async findAllProject(): Promise<Project[]> {
     return await this.projectRepository.find();
@@ -70,18 +73,10 @@ export class ProjectService {
     updateProjectDto: UpdateProjectDto,
     association: Association,
   ): Promise<Project> {
-    console.log(idValue);
-    console.log(
-      'updateProjectDto-du-Service-------------!!!',
-      updateProjectDto,
-    );
-    console.log('Association---------------!!!', association);
-    console.log('IF-!!!association ||', association);
-    console.log('IF-association.id !== idValue', association.id);
     const projectToUpdate = await this.projectRepository.findOne({
       where: { id: idValue },
     });
-    //Je m'assure que seule cette association puisse modifier son profil
+    //Je m'assure que seule cette association puisse modifier son projet
     if (!association || association.id !== projectToUpdate.association_.id) {
       throw new UnauthorizedException(
         "Vous n'êtes pas autorisé à modifier ces informations",
@@ -90,10 +85,6 @@ export class ProjectService {
     if (!projectToUpdate) {
       throw new NotFoundException("Le projet n'existe pas");
     }
-    console.log('id requête project---!!!', idValue);
-    console.log('projectToUpdate-Service---!!!', projectToUpdate);
-    console.log('!!!projectToUpdate---!!!', !projectToUpdate);
-
     const { topic, body, website, picture, favoris } = updateProjectDto;
     if (updateProjectDto.topic) {
       projectToUpdate.topic = topic;
@@ -110,7 +101,6 @@ export class ProjectService {
     if (updateProjectDto.favoris) {
       projectToUpdate.favoris = favoris;
     }
-    console.log('return-projectRepository.save----!!!!', projectToUpdate);
     return await this.projectRepository.save(projectToUpdate);
   }
 
