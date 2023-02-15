@@ -23,14 +23,14 @@ export class DonorController {
   // localhost:8082/api/donor/id
   //Trouve un donateur via son id que l'on soit donor ou association connectés.
   @Get(':id')
-  findOne(@Param('id') id: string): Promise<Donor> {
+  async findOne(@Param('id') id: string): Promise<Donor> {
     console.log('1 Controller Param id---!!!', id);
     return this.donorService.findOneDonor(id);
   }
 
   //Uniquement le donateur avec son ID peut modifier son profil
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateDonorDto: UpdateDonorDto,
     @GetDonor() donor: Donor,
@@ -45,6 +45,7 @@ export class DonorController {
   async delete(@Param('id') id: string, @GetDonor() donor: Donor) {
     return this.donorService.deleteDonor(id, donor);
   }
+
   //--------------------------------------------ADMIN------------------
   // Uniquement un admin peut avoir l'ensemble des donateurs
   //   @Get('admin')
