@@ -71,3 +71,23 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+# NestJS dependencies
+
+npm install --save @nestjs/common
+@nestjs/config
+@nestjs/core
+@nestjs/jwt
+@nestjs/mapped-types
+@nestjs/passport
+@nestjs/platform-express
+@nestjs/serve-static
+@nestjs/typeorm
+
+# Other dependencies
+
+npm install --save bcrypt class-transformer class-validator dotenv express multer passport-jwt pg reflect-metadata rxjs typeorm uuid
+
+# Development dependencies
+
+npm install --save-dev nodemon rimraf
