@@ -54,11 +54,6 @@ export class UpdateDonorDto extends PartialType(CreateDonorAuthDto) {
   password: string;
   hashedPassword: string;
 
-  //--------------------------------------------------photo
-  @IsOptional()
-  @IsString()
-  picture: string;
-
   //--------------------------------------------------role
   role: RoleEnumType.DONOR;
 }

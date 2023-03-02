@@ -64,12 +64,6 @@ export class Association {
   })
   body: string;
 
-  // Colonne photo non obligatoire
-  @Column({
-    nullable: true,
-  })
-  picture: string;
-
   // Colonne favoris non obligatoire
   @Column({
     nullable: true,

@@ -42,3 +42,14 @@ export class AuthController {
     return this.authService.loginAsso(LoginAssoDto);
   }
 }
+
+// @Post('login')
+//   async login(@Body() user: UserLoginDto) {
+//     if (user.mail && user.password) {
+//       return this.authService.login(user);
+//     } else {
+//       throw new BadRequestException(
+//         'Les champs mail et/ou password ne sont pas renseignés correctement',
+//       );
+//     }
+//   }

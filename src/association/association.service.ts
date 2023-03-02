@@ -59,8 +59,7 @@ export class AssociationService {
       throw new NotFoundException("L'association n'existe pas");
     }
     //Items du update-asso-Dto à modifier
-    const { name, email, password, theme, website, body, picture } =
-      upDateAssoDto;
+    const { name, email, password, theme, website, body } = upDateAssoDto;
     try {
       if (upDateAssoDto.password) {
         const salt = await bcrypt.genSalt();
@@ -81,9 +80,6 @@ export class AssociationService {
       }
       if (upDateAssoDto.body) {
         upDateAssociation.body = body;
-      }
-      if (upDateAssoDto.picture) {
-        upDateAssociation.picture = picture;
       }
       console.log('return associationRepository.sav----!!!', upDateAssociation);
       return await this.associationRepository.save(upDateAssociation);

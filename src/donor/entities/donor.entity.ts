@@ -50,12 +50,6 @@ export class Donor {
   })
   password: string;
 
-  // Colonne photo non obligatoire
-  @Column({
-    nullable: true,
-  })
-  picture: string;
-
   // Colonne role généré automatiquement
   @Column({
     type: 'enum',

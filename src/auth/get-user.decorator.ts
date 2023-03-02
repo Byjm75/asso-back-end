@@ -11,10 +11,7 @@ export interface Utilisateur {
 export const GetDonor = createParamDecorator(
   (_data, ctx: ExecutionContext): Donor => {
     const req = ctx.switchToHttp().getRequest();
-    console.log('1 get-user-deco-req---!!!', req);
     const donor = req.user;
-    console.log('2 get-user-deco-req.user---!!!', donor);
-    console.log('3 get-user-deco-req.user---!!!', req.user);
     return donor;
   },
 );
@@ -22,10 +19,7 @@ export const GetDonor = createParamDecorator(
 export const GetAsso = createParamDecorator(
   (_data, ctx: ExecutionContext): Association => {
     const req = ctx.switchToHttp().getRequest();
-    console.log('1 get-user-deco-req---!!!', req);
     const asso = req.user;
-    console.log('2 get-user-deco-req.association---!!!', asso);
-    console.log('3 get-user-deco-req.association---!!!', req.user);
     return asso;
   },
 );

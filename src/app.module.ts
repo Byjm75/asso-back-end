@@ -4,7 +4,6 @@ import { AppService } from './app.service';
 import { AssociationModule } from './association/association.module';
 import { ProjectModule } from './project/project.module';
 import { ConfigModule } from '@nestjs/config';
-import { MulterModule } from '@nestjs/platform-express';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -15,6 +14,7 @@ import { Project } from './project/entities/project.entity';
 import { DonationModule } from './donation/donation.module';
 import { Donation } from './donation/entities/donation.entity';
 import { DonorModule } from './donor/donor.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { DonorModule } from './donor/donor.module';
       envFilePath: '.env.local',
     }),
     MulterModule.register({ dest: './files' }),
-    ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'files') }),
+    // ServeStaticModule.forRoot({ rootPath: join(__dirname, '..', 'public') }),
     // TypeOrmModule.forFeature([Image]),
     TypeOrmModule.forRoot({
       type: 'postgres',

@@ -112,11 +112,6 @@ export class CreateAssoAuthDto {
   })
   body: string;
 
-  //--------------------------------------------------photo
-  @IsOptional()
-  @IsString()
-  picture: string;
-
   //--------------------------------------------------role
   role: RoleEnumType.ASSOCIATION;
 }

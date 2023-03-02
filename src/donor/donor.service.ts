@@ -65,9 +65,6 @@ export class DonorService {
       if (upDateDonorDto.email) {
         upDateDonor.email = email;
       }
-      if (upDateDonorDto.picture) {
-        upDateDonor.picture = picture;
-      }
       console.log('return donorRepository.sav----!!!', upDateDonor);
       return await this.donorRepository.save(upDateDonor);
     } catch {

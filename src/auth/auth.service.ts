@@ -27,8 +27,7 @@ export class AuthService {
   //-----------------------------------------------------------------Donateur-----------------------
   // Création d'un compte donateur
   async createDonor(createDonorAuthDto: CreateDonorAuthDto) {
-    const { pseudo, surname, firstname, email, password, picture } =
-      createDonorAuthDto;
+    const { pseudo, surname, firstname, email, password } = createDonorAuthDto;
     console.log('1 Service createDonorAuthDto---!!!', createDonorAuthDto);
     // hashage du mot de passe
     const salt = await bcrypt.genSalt();
@@ -40,7 +39,6 @@ export class AuthService {
       firstname,
       email,
       password: hashedPassword,
-      picture,
     });
     try {
       const createdDonor = await this.donorRepository.save(donor);
@@ -62,6 +60,8 @@ export class AuthService {
     });
     console.log('1 Service email---!!!', email);
     console.log('2 Service password---!!!', password);
+    console.log('donor---!!!', donor.role);
+    console.log(donor);
     //Ici comparasaison du MP Hashé
     if (donor && (await bcrypt.compare(password, donor.password))) {
       const payload = { donor };
@@ -124,3 +124,28 @@ export class AuthService {
     }
   }
 }
+
+// async login(userLogin: UserLoginDto) {
+//   const userLogged = await this.userRepository.findOneBy({
+//     mail: userLogin.mail,
+//   });
+//   console.log('userLogged-----', userLogged);
+//   if (
+//     userLogged &&
+//     (await bcrypt.compare(userLogin.password, userLogged.mot_de_passe))
+//   ) {
+//     const payload = {
+//       userName: userLogin.mail,
+//       role: userLogged.role.label,
+//       id: userLogged.id,
+//     };
+//     console.log('payload: ', payload);
+//     return {
+//       access_token: this.jwtService.sign(payload),
+//     };
+//   } else {
+//     throw new UnauthorizedException(
+//       'le mail et/ou le password sont incorrects',
+//     );
+//   }
+// }
