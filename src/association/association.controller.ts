@@ -16,7 +16,7 @@ import { Association } from './entities/association.entity';
 // localhost:8082/api/association
 @Controller('association')
 //Toutes les routes sont accessibles uniquement avec un Token
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard())
 export class AssociationController {
   constructor(private associationService: AssociationService) {}
 

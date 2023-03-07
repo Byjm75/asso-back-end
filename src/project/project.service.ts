@@ -95,9 +95,6 @@ export class ProjectService {
     if (updateProjectDto.website) {
       projectToUpdate.website = website;
     }
-    if (updateProjectDto.picture) {
-      projectToUpdate.picture = picture;
-    }
     if (updateProjectDto.favoris) {
       projectToUpdate.favoris = favoris;
     }

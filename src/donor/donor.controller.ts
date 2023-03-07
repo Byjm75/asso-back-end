@@ -41,7 +41,7 @@ export class DonorController {
   }
 
   //Uniquement le donateur avec son ID peut supprimer son profil
-  @Delete(':id')
+  @Delete('/:id')
   async delete(@Param('id') id: string, @GetDonor() donor: Donor) {
     return this.donorService.deleteDonor(id, donor);
   }

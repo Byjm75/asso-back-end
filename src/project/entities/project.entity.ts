@@ -34,12 +34,6 @@ export class Project {
   })
   website: string;
 
-  // Colonne photo non obligatoire
-  @Column({
-    nullable: true,
-  })
-  picture: string;
-
   // Colonne favoris
   @Column({
     nullable: true,
@@ -51,7 +45,7 @@ export class Project {
   @ManyToOne(() => Association, (associations) => associations.projects, {
     onDelete: 'CASCADE',
     nullable: true,
-    eager: true,
+    eager: false,
   })
   association_: Association;
 

@@ -31,6 +31,7 @@ export class Association {
   // Colonne siret obligatoire
   @Column({
     nullable: false,
+    unique: true,
     type: 'char',
     length: 14,
   })
@@ -39,6 +40,7 @@ export class Association {
   // Colonne rna obligatoire
   @Column({
     nullable: false,
+    unique: true,
     type: 'char',
     length: 10,
   })
@@ -47,7 +49,7 @@ export class Association {
   // Colonne thème obligatoire
   @Column({
     nullable: false,
-    type: 'char',
+    type: 'varchar',
     length: 50,
   })
   theme: string;
@@ -83,6 +85,7 @@ export class Association {
   @OneToMany(() => Project, (projects) => projects.association_, {
     nullable: false,
     onDelete: 'CASCADE',
+    eager: true,
   })
   projects: Project[];
 }
