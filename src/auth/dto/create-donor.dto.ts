@@ -10,7 +10,7 @@ import { RoleEnumType } from '../roles.decorator';
 
 // Typage du Donateur pour la création de compte avec les décorateurs de Class-Validator (Assure la gestion d'erreur)
 export class CreateDonorAuthDto {
-  //------------------------------------------------------pseudo
+  //-----------------------------pseudo
   @IsNotEmpty({
     message: ' *Le pseudo ne peux pas être vide',
   })
@@ -21,8 +21,7 @@ export class CreateDonorAuthDto {
     message: ' *Le pseudo doit contenir au moins un caractère ',
   })
   pseudo: string;
-
-  //------------------------------------------------------surname
+  //----------------------------surname
   @IsNotEmpty({
     message: ' *Le prénom ne peux pas être vide',
   })
@@ -33,8 +32,7 @@ export class CreateDonorAuthDto {
     message: ' *Le prénom doit contenir au moins un caractère ',
   })
   surname: string;
-
-  //------------------------------------------------------firstname
+  //--------------------------firstname
   @IsNotEmpty({
     message: ' *Le nom ne peux pas être vide',
   })
@@ -48,8 +46,7 @@ export class CreateDonorAuthDto {
     message: ' *Le nom doit contenir au moins un caractère ',
   })
   firstname: string;
-
-  //-----------------------------------------------------email
+  //---------------------------email
   @IsNotEmpty({
     message: "*L'email ne peux pas être vide",
   })
@@ -61,8 +58,7 @@ export class CreateDonorAuthDto {
   )
   @IsString()
   email: string;
-
-  //--------------------------------------------------mot de passe
+  //--------------------------mot de passe
   @IsNotEmpty({
     message: ' *Le mot de passe ne peux pas être vide',
   })
@@ -77,12 +73,6 @@ export class CreateDonorAuthDto {
       "*Le mot de passe doit contenir une Majuscule, une minuscule, un nombre et pas d'espace",
   })
   password: string;
-
-  //--------------------------------------------------photo
-  @IsOptional()
-  @IsString()
-  picture: string;
-
-  //--------------------------------------------------role
+  //--------------------------role
   role: RoleEnumType.DONOR;
 }

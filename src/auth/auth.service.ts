@@ -58,16 +58,12 @@ export class AuthService {
     const donor = await this.donorRepository.findOneBy({
       email,
     });
-    console.log('1 Service email---!!!', email);
-    console.log('2 Service password---!!!', password);
-    console.log('donor---!!!', donor.role);
-    console.log(donor);
     //Ici comparasaison du MP Hashé
     if (donor && (await bcrypt.compare(password, donor.password))) {
       const payload = { donor };
       //Ici envoie du Token d'accés si authorisé
       const accessToken = await this.jwtService.sign(payload);
-      return { accessToken };
+      return { accessToken, donor };
     } else {
       throw new UnauthorizedException(
         'Le couple email/password est incorrect!',

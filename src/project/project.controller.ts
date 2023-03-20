@@ -19,7 +19,7 @@ import { GetAsso } from 'src/auth/get-user.decorator';
 // localhost:8082/api/project
 @Controller('project')
 //Toutes les routes sont accessibles uniquement avec un Token
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard())
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
   //Un projet peut-être uniquement crée par une association

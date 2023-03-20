@@ -19,7 +19,7 @@ import { Donation } from './entities/donation.entity';
 // localhost:8082/api/donation
 @Controller('donation')
 //Toutes les routes sont accessibles uniquement avec un Token
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard())
 export class DonationController {
   constructor(private donationService: DonationService) {}
 

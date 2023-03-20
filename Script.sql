@@ -15,7 +15,6 @@ CREATE TABLE donor (
     firstname VARCHAR (255) NOT NULL,
     email VARCHAR (255) NOT NULL,
     password VARCHAR (255) NOT NULL,
-    picture VARCHAR (255),
     role CHAR (20),
 );
 
@@ -30,19 +29,25 @@ CREATE TABLE association (
     theme CHAR (50) NOT NULL,
     url VARCHAR (255),
     body text,
-    picture VARCHAR (255),
-    favoris boolean,
     role CHAR (20),
   );
 
-  CREATE TABLE donor (
+ CREATE TABLE donor_association_association (
+    "donorId" uuid NOT null, 
+    "associationId" uuid NOT null,
+    constraint pk_donas primary key ("donorId","associationId"),
+    CONSTRAINT fk_donor FOREIGN KEY ("donorId") 
+    REFERENCES donor(id),
+    CONSTRAINT fk_association FOREIGN KEY ("associationId") 
+    REFERENCES association(id)
+  );
+
+  CREATE TABLE project (
     id uuid DEFAULT uuid_generate_v4 (),
     PRIMARY KEY (id),
     topic CHAR (50) NOT NULL,
     body text NOT NULL,
     url VARCHAR (255),
-    picture VARCHAR (255),
-    favoris boolean,
     CONSTRAINT fk_association FOREIGN KEY (association_id) 
     REFERENCES association(id)
   );

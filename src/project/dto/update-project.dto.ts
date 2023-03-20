@@ -43,16 +43,6 @@ export class UpdateProjectDto extends PartialType(CreateProjectDto) {
   @IsUrl()
   website: string;
 
-  //--------------------------------------------------photo
-  @IsOptional()
-  @IsString()
-  picture: string;
-
-  //--------------------------------------------------favoris
-  @IsOptional()
-  @IsString()
-  favoris: string;
-
   //--------------------------------------------------clé-étrangére
   @IsUUID()
   association_id: string;

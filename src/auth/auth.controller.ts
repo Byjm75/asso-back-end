@@ -1,4 +1,4 @@
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAssoAuthDto } from './dto/create-asso.dto';
 import { CreateDonorAuthDto } from './dto/create-donor.dto';
@@ -13,7 +13,7 @@ export class AuthController {
   // localhost:8082/api/auth/register/donor
   // Ici le donateur créer son profil
   @Post('register/donor')
-  create(@Body() createDonorAuthDto: CreateDonorAuthDto) {
+  async create(@Body() createDonorAuthDto: CreateDonorAuthDto) {
     return this.authService.createDonor(createDonorAuthDto);
   }
 
@@ -25,6 +25,7 @@ export class AuthController {
   ): Promise<{ accessToken: string }> {
     return this.authService.loginDonor(loginDonorDto);
   }
+
   //-----------------------------------------Association-------------------------------
   // localhost:8082/api/auth/register/association
   // Ici l'association créer son profil
@@ -42,14 +43,3 @@ export class AuthController {
     return this.authService.loginAsso(LoginAssoDto);
   }
 }
-
-// @Post('login')
-//   async login(@Body() user: UserLoginDto) {
-//     if (user.mail && user.password) {
-//       return this.authService.login(user);
-//     } else {
-//       throw new BadRequestException(
-//         'Les champs mail et/ou password ne sont pas renseignés correctement',
-//       );
-//     }
-//   }

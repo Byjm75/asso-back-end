@@ -17,9 +17,9 @@ export class CreateDonationDto {
   by_month: boolean;
 
   //--------------------------------------------------clé-étrangére-relation-table-project
-  @IsUUID()
-  project_id: string;
+  // @IsUUID()
+  // project_id: string;
   //--------------------------------------------------clé-étrangére-relation-table-donor
-  @IsUUID()
-  donor_id: string;
+  // @IsUUID()
+  // donor_id: string;
 }

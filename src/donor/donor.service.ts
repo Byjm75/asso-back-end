@@ -45,14 +45,12 @@ export class DonorService {
     const upDateDonor = await this.donorRepository.findOne({
       where: { id: idValue },
     });
-    console.log('id requête utilisateur---------------!!!', donor);
-    console.log('where: { id: idValue }---------------!!!', idValue);
 
     if (!upDateDonor) {
       throw new NotFoundException("Le donateur n'existe pas");
     }
     //Items du update-donnor-Dto à modifier
-    const { pseudo, email, password, picture } = upDateDonorDto;
+    const { pseudo, email, password } = upDateDonorDto;
     try {
       if (upDateDonorDto.password) {
         const salt = await bcrypt.genSalt();

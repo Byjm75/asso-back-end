@@ -2,7 +2,6 @@ import {
   ConflictException,
   ForbiddenException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -85,7 +84,7 @@ export class ProjectService {
     if (!projectToUpdate) {
       throw new NotFoundException("Le projet n'existe pas");
     }
-    const { topic, body, website, picture, favoris } = updateProjectDto;
+    const { topic, body, website } = updateProjectDto;
     if (updateProjectDto.topic) {
       projectToUpdate.topic = topic;
     }
@@ -94,9 +93,6 @@ export class ProjectService {
     }
     if (updateProjectDto.website) {
       projectToUpdate.website = website;
-    }
-    if (updateProjectDto.favoris) {
-      projectToUpdate.favoris = favoris;
     }
     return await this.projectRepository.save(projectToUpdate);
   }

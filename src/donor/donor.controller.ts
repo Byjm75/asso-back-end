@@ -27,7 +27,6 @@ export class DonorController {
     console.log('1 Controller Param id---!!!', id);
     return this.donorService.findOneDonor(id);
   }
-
   //Uniquement le donateur avec son ID peut modifier son profil
   @Patch(':id')
   async update(
@@ -35,11 +34,8 @@ export class DonorController {
     @Body() updateDonorDto: UpdateDonorDto,
     @GetDonor() donor: Donor,
   ): Promise<Donor> {
-    console.log('1 Controller Body updateDonorDto---!!!', updateDonorDto);
-    console.log('2 Controller GetDonor donor---!!!', donor);
     return this.donorService.updateDonor(id, updateDonorDto, donor);
   }
-
   //Uniquement le donateur avec son ID peut supprimer son profil
   @Delete('/:id')
   async delete(@Param('id') id: string, @GetDonor() donor: Donor) {

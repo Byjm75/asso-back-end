@@ -10,7 +10,7 @@ import {
 
 // Typage de création de projet avec les décorateurs de Class-Validator (Assure la gestion d'erreur)
 export class CreateProjectDto {
-  //------------------------------------------------------topic
+  //-------------topic
   @IsNotEmpty({
     message: ' *Le thème doit être renseigné',
   })
@@ -21,8 +21,7 @@ export class CreateProjectDto {
     message: '*Le texte doit contenir au maximum 50 caractères',
   })
   topic: string;
-
-  //------------------------------------------------------body
+  //-----------body
   @IsNotEmpty({
     message: ' *Le champ de texte doit être renseigné',
   })
@@ -33,23 +32,11 @@ export class CreateProjectDto {
     message: '*Le champ de texte doit contenir au moins 10 caractères',
   })
   body: string;
-
-  //---------------------------------------------------website
+  //--------website
   @IsOptional()
   @IsUrl()
   website: string;
-
-  //--------------------------------------------------photo
-  @IsOptional()
-  @IsString()
-  picture: string;
-
-  //--------------------------------------------------favoris
-  @IsOptional()
-  @IsString()
-  favoris: string;
-
-  //--------------------------------------------------clé-étrangére-relation-table-association
+  //---------clé-étrangére-relation-table-association
   @IsUUID()
   association_id: string;
 }
