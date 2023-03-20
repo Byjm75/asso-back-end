@@ -25,13 +25,11 @@ export class Donor {
   // Colonne pseudo obligatoire et pseudo unique
   @Column({
     nullable: false,
-    unique: true,
   })
   surname: string;
   // Colonne pseudo obligatoire et pseudo unique
   @Column({
     nullable: false,
-    unique: true,
   })
   firstname: string;
   // Colonne email obligatoire

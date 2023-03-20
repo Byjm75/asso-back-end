@@ -73,6 +73,8 @@ export class CreateDonorAuthDto {
       "*Le mot de passe doit contenir une Majuscule, une minuscule, un nombre et pas d'espace",
   })
   password: string;
+  hashedPassword: string;
+
   //--------------------------role
   role: RoleEnumType.DONOR;
 }

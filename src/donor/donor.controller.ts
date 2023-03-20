@@ -16,7 +16,7 @@ import { Donor } from './entities/donor.entity';
 // localhost:8082/api/donor
 @Controller('donor')
 //Toutes les routes sont accessibles uniquement avec un Token
-@UseGuards(AuthGuard())
+@UseGuards(AuthGuard('jwt'))
 export class DonorController {
   constructor(private donorService: DonorService) {}
 
